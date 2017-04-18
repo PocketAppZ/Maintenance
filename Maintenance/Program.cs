@@ -100,52 +100,59 @@ namespace Maintenance
                 int deleteTemp = 0;
                 foreach (var paths in PathFilesToDelete)
                 {
-                    string Variable = PathFilesToDelete.GetValues(paths.ToString()).FirstOrDefault();
-                    var filesPath = Environment.ExpandEnvironmentVariables(Variable);
-                    if (filesPath != "")
+                    try
                     {
-                        foreach (string file in Directory.GetFiles(filesPath))
+                        string Variable = PathFilesToDelete.GetValues(paths.ToString()).FirstOrDefault();
+                        var filesPath = Environment.ExpandEnvironmentVariables(Variable);
+                        if (filesPath != "")
                         {
-                            try
+                            foreach (string file in Directory.GetFiles(filesPath))
                             {
-                                if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
+                                try
                                 {
-                                    File.Delete(file);
-                                }
-                                else
-                                {
-                                    deleteTemp++;
-                                    if (deleteTemp == 1)
+                                    if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
                                     {
-                                        DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
-                                        directory.DeleteTemp();
+                                        File.Delete(file);
+                                    }
+                                    else
+                                    {
+                                        deleteTemp++;
+                                        if (deleteTemp == 1)
+                                        {
+                                            DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
+                                            directory.DeleteTemp();
+                                        }
                                     }
                                 }
+                                catch (FileNotFoundException)
+                                {
+                                    continue;
+                                }
+                                catch (IOException)
+                                {
+                                    continue;
+                                }
                             }
-                            catch (IOException)
+                            foreach (string directory in Directory.GetDirectories(filesPath))
                             {
-                                continue;
+                                try
+                                {
+                                    Directory.Delete(directory, true);
+                                }
+                                catch (DirectoryNotFoundException)
+                                {
+                                    continue;
+                                }
+                                catch (IOException)
+                                {
+                                    continue;
+                                }
                             }
                         }
-                        foreach (string directory in Directory.GetDirectories(filesPath))
-                        {
-                            try
-                            {
-                                Directory.Delete(directory, true);
-                            }
-                            catch (IOException)
-                            {
-                                continue;
-                            }
-                        }
-                        try
-                        {
-                            Directory.Delete(filesPath, true);
-                        }
-                        catch (IOException)
-                        {
-                            continue;
-                        }
+                    }
+                    catch (DirectoryNotFoundException)
+                    {
+                        continue;
                     }
                 }
             }
