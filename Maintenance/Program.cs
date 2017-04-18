@@ -100,8 +100,7 @@ namespace Maintenance
                 int deleteTemp = 0;
                 foreach (var paths in PathFilesToDelete)
                 {
-                    string pathFilesToDelete = PathFilesToDelete.GetValues(paths.ToString()).FirstOrDefault();
-                    var Variable = pathFilesToDelete;
+                    string Variable = PathFilesToDelete.GetValues(paths.ToString()).FirstOrDefault();
                     var filesPath = Environment.ExpandEnvironmentVariables(Variable);
                     if (filesPath != "")
                     {
@@ -123,10 +122,29 @@ namespace Maintenance
                                     }
                                 }
                             }
-                            catch (Exception)
+                            catch (IOException)
                             {
                                 continue;
                             }
+                        }
+                        foreach (string directory in Directory.GetDirectories(filesPath))
+                        {
+                            try
+                            {
+                                Directory.Delete(directory, true);
+                            }
+                            catch (IOException)
+                            {
+                                continue;
+                            }
+                        }
+                        try
+                        {
+                            Directory.Delete(filesPath, true);
+                        }
+                        catch (IOException)
+                        {
+                            continue;
                         }
                     }
                 }
