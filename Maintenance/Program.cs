@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using System.ServiceProcess;
@@ -12,6 +11,7 @@ namespace Maintenance
 {
     static class Program
     {
+        static DateTime today = DateTime.Today;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -20,13 +20,13 @@ namespace Maintenance
         {
             // App.config Values
             var PathFilesToDelete = ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection;
+            var PathFilesToDeleteOlder = ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection;
             var FilesToDelete = ConfigurationManager.GetSection("FilesToDelete") as NameValueCollection;
             var FilesToHide = ConfigurationManager.GetSection("FilesToHide") as NameValueCollection;
             var TasksToDisable = ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection;
             var ServicesToManual = ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection;
 
             // Run Disk Check once a month before 11 am on Monday
-            DateTime today = DateTime.Today;
             if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && DateTime.Now.Hour <= 11)
             {
                 using (Process process = new Process())
@@ -94,7 +94,7 @@ namespace Maintenance
                     }
                 }
             }
-            // Delete Files in a Directory
+            // Delete Files and Folders in a Directory
             if (PathFilesToDelete != null)
             {
                 int deleteTemp = 0;
@@ -138,6 +138,70 @@ namespace Maintenance
                                 try
                                 {
                                     Directory.Delete(directory, true);
+                                }
+                                catch (DirectoryNotFoundException)
+                                {
+                                    continue;
+                                }
+                                catch (IOException)
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    catch (DirectoryNotFoundException)
+                    {
+                        continue;
+                    }
+                }
+            }
+            // Delete Files and Folders in a Directory older than 1 day
+            if (PathFilesToDeleteOlder != null)
+            {
+                foreach (var paths in PathFilesToDeleteOlder)
+                {
+                    try
+                    {
+                        string Variable = PathFilesToDeleteOlder.GetValues(paths.ToString()).FirstOrDefault();
+                        var filesPath = Environment.ExpandEnvironmentVariables(Variable);
+                        if (filesPath != "")
+                        {
+                            foreach (string d in Directory.GetDirectories(filesPath))
+                            {
+                                foreach (string f in Directory.GetFiles(d))
+                                {
+                                    try
+                                    {
+                                        FileInfo fi = new FileInfo(f);
+                                        if (fi.CreationTime < DateTime.Now.AddDays(-1))
+                                            File.Delete(f);
+                                    }
+                                    catch (UnauthorizedAccessException)
+                                    {
+                                        continue;
+                                    }
+                                    catch (FileNotFoundException)
+                                    {
+                                        continue;
+                                    }
+                                    catch (IOException)
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                            foreach (string directory in Directory.GetDirectories(filesPath))
+                            {
+                                try
+                                {
+                                    DirectoryInfo di = new DirectoryInfo(directory);
+                                    if (di.CreationTime < DateTime.Now.AddDays(-1))
+                                        Directory.Delete(directory, true);
+                                }
+                                catch (UnauthorizedAccessException)
+                                {
+                                    continue;
                                 }
                                 catch (DirectoryNotFoundException)
                                 {
