@@ -21,6 +21,7 @@ namespace Maintenance
             // App.config Values
             var PathFilesToDelete = ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection;
             var PathFilesToDeleteOlder = ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection;
+            var PathFilesToDeleteDays = ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection;
             var FilesToDelete = ConfigurationManager.GetSection("FilesToDelete") as NameValueCollection;
             var FilesToHide = ConfigurationManager.GetSection("FilesToHide") as NameValueCollection;
             var TasksToDisable = ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection;
@@ -171,23 +172,78 @@ namespace Maintenance
                             {
                                 foreach (string f in Directory.GetFiles(d))
                                 {
-                                    try
+                                    if (PathFilesToDeleteDays != null)
                                     {
-                                        FileInfo fi = new FileInfo(f);
-                                        if (fi.CreationTime < DateTime.Now.AddDays(-1))
-                                            File.Delete(f);
+                                        foreach (var days in PathFilesToDeleteDays)
+                                        {
+                                            string DaysNumberValue = PathFilesToDeleteDays.GetValues(days.ToString()).FirstOrDefault();
+                                            int DaysNumber = Convert.ToInt32(DaysNumberValue);
+                                            if (paths.ToString() == days.ToString())
+                                            {
+                                                try
+                                                {
+                                                    FileInfo fi = new FileInfo(f);
+                                                    if (fi.CreationTime < DateTime.Now.AddDays(-DaysNumber))
+                                                    {
+                                                        File.Delete(f);
+                                                    }
+                                                }
+                                                catch (UnauthorizedAccessException)
+                                                {
+                                                    continue;
+                                                }
+                                                catch (FileNotFoundException)
+                                                {
+                                                    continue;
+                                                }
+                                                catch (IOException)
+                                                {
+                                                    continue;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                try
+                                                {
+                                                    FileInfo fi = new FileInfo(f);
+                                                    if (fi.CreationTime < DateTime.Now.AddDays(-1))
+                                                        File.Delete(f);
+                                                }
+                                                catch (UnauthorizedAccessException)
+                                                {
+                                                    continue;
+                                                }
+                                                catch (FileNotFoundException)
+                                                {
+                                                    continue;
+                                                }
+                                                catch (IOException)
+                                                {
+                                                    continue;
+                                                }
+                                            }
+                                        }
                                     }
-                                    catch (UnauthorizedAccessException)
+                                    else
                                     {
-                                        continue;
-                                    }
-                                    catch (FileNotFoundException)
-                                    {
-                                        continue;
-                                    }
-                                    catch (IOException)
-                                    {
-                                        continue;
+                                        try
+                                        {
+                                            FileInfo fi = new FileInfo(f);
+                                            if (fi.CreationTime < DateTime.Now.AddDays(-1))
+                                                File.Delete(f);
+                                        }
+                                        catch (UnauthorizedAccessException)
+                                        {
+                                            continue;
+                                        }
+                                        catch (FileNotFoundException)
+                                        {
+                                            continue;
+                                        }
+                                        catch (IOException)
+                                        {
+                                            continue;
+                                        }
                                     }
                                 }
                             }
