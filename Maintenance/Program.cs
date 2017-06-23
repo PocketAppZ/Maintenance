@@ -26,10 +26,75 @@ namespace Maintenance
             var FilesToHide = ConfigurationManager.GetSection("FilesToHide") as NameValueCollection;
             var TasksToDisable = ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection;
             var ServicesToManual = ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection;
+            var Logging = ConfigurationManager.GetSection("Logging") as NameValueCollection;
 
+            // Log all instances
+            if (Logging != null)
+            {
+                foreach (var value in Logging)
+                {
+                    string logging = Logging.GetValues(value.ToString()).FirstOrDefault();
+                    if (logging != "")
+                    {
+                        if (logging == "true")
+                        {
+                            string LogDirectory = Environment.CurrentDirectory + @"\Log";
+                            string LogFile = LogDirectory + @"\Application.log";
+                            string LogBak = LogDirectory + @"\Application.log.bak";
+                            if (!Directory.Exists(LogDirectory))
+                            {
+                                Directory.CreateDirectory(LogDirectory);
+                            }
+                            FileInfo fi = new FileInfo(LogFile);
+                            if (fi.LastWriteTime < DateTime.Now.AddDays(-7))
+                            {
+                                if (File.Exists(LogBak))
+                                {
+                                    File.Delete(LogBak);
+                                }
+                                if (File.Exists(LogFile))
+                                {
+                                    File.Copy(LogFile, LogBak);
+                                    File.Delete(LogFile);
+                                }
+                            }
+                            Trace.Listeners.Clear();
+                            TextWriterTraceListener twtl = null;
+                            try
+                            {
+                                twtl = new TextWriterTraceListener(LogFile);
+                                ConsoleTraceListener ctl = null;
+                                try
+                                {
+                                    ctl = new ConsoleTraceListener(false);
+                                    Trace.Listeners.Add(twtl);
+                                    Trace.Listeners.Add(ctl);
+                                    Trace.AutoFlush = true;
+                                }
+                                finally
+                                {
+                                    if (ctl != null)
+                                    {
+                                        ctl.Dispose();
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                if (twtl != null)
+                                {
+                                    twtl.Dispose();
+                                }
+                            }
+                            Trace.WriteLine(DateTime.Now + " Application has started");
+                        }
+                    }
+                }
+            }
             // Run Disk Check once a month before 11 am on Monday
             if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && DateTime.Now.Hour <= 11)
             {
+                Trace.WriteLine(DateTime.Now + " Scheduling a disk check to run at next reboot.");
                 using (Process process = new Process())
                 {
                     process.StartInfo.FileName = "CMD.exe";
@@ -79,12 +144,14 @@ namespace Maintenance
                             FileAttributes attributes = File.GetAttributes(filePath);
                             if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
                             {
+                                Trace.WriteLine(DateTime.Now + " Hiding file: " + filePath);
                                 File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.Hidden);
                                 File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.System);
                             }
                         }
                         else if (Directory.Exists(filePath))
                         {
+                            Trace.WriteLine(DateTime.Now + " Hiding directory: " + filePath);
                             FileAttributes attributes = File.GetAttributes(filePath);
                             if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
                             {
@@ -113,6 +180,7 @@ namespace Maintenance
                                 {
                                     if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
                                     {
+                                        Trace.WriteLine(DateTime.Now + " Deleting file: " + file);
                                         File.Delete(file);
                                     }
                                     else
@@ -120,6 +188,7 @@ namespace Maintenance
                                         deleteTemp++;
                                         if (deleteTemp == 1)
                                         {
+                                            Trace.WriteLine(DateTime.Now + " Deleting temp files");
                                             DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
                                             directory.DeleteTemp();
                                         }
@@ -138,6 +207,7 @@ namespace Maintenance
                             {
                                 try
                                 {
+                                    Trace.WriteLine(DateTime.Now + " Deleting directory: " + directory);
                                     Directory.Delete(directory, true);
                                 }
                                 catch (DirectoryNotFoundException)
@@ -185,6 +255,7 @@ namespace Maintenance
                                                     FileInfo fi = new FileInfo(f);
                                                     if (fi.CreationTime < DateTime.Now.AddDays(-DaysNumber))
                                                     {
+                                                        Trace.WriteLine(DateTime.Now + " Deleting file: " + f);
                                                         File.Delete(f);
                                                     }
                                                 }
@@ -207,7 +278,10 @@ namespace Maintenance
                                                 {
                                                     FileInfo fi = new FileInfo(f);
                                                     if (fi.CreationTime < DateTime.Now.AddDays(-1))
+                                                    {
+                                                        Trace.WriteLine(DateTime.Now + " Deleting file: " + f);
                                                         File.Delete(f);
+                                                    }
                                                 }
                                                 catch (UnauthorizedAccessException)
                                                 {
@@ -230,7 +304,10 @@ namespace Maintenance
                                         {
                                             FileInfo fi = new FileInfo(f);
                                             if (fi.CreationTime < DateTime.Now.AddDays(-1))
+                                            {
+                                                Trace.WriteLine(DateTime.Now + " Deleting file: " + f);
                                                 File.Delete(f);
+                                            }
                                         }
                                         catch (UnauthorizedAccessException)
                                         {
@@ -253,7 +330,10 @@ namespace Maintenance
                                 {
                                     DirectoryInfo di = new DirectoryInfo(directory);
                                     if (di.CreationTime < DateTime.Now.AddDays(-1))
+                                    {
+                                        Trace.WriteLine(DateTime.Now + " Deleting directory: " + directory);
                                         Directory.Delete(directory, true);
+                                    }
                                 }
                                 catch (UnauthorizedAccessException)
                                 {
@@ -283,9 +363,13 @@ namespace Maintenance
                 {
                         string fileTodelete = FilesToDelete.GetValues(file.ToString()).FirstOrDefault();
                     if (fileTodelete != "")
+                    {
+                        Trace.WriteLine(DateTime.Now + " Deleting file: " + fileTodelete);
                         File.Delete(fileTodelete);
+                    }
                 }
             }
+            Trace.WriteLine("\n");
             Environment.Exit(0);
         }
         // Set File Attrubutes
@@ -313,6 +397,7 @@ namespace Maintenance
                     {
                         if (stdout.Contains("Ready"))
                         {
+                            Trace.WriteLine(DateTime.Now + " Disabling task: " + taskname);
                             ProcessStartInfo info = new ProcessStartInfo();
                             info.FileName = "schtasks.exe";
                             info.UseShellExecute = false;
@@ -353,6 +438,7 @@ namespace Maintenance
         {
             using (var mo = new ManagementObject(string.Format("Win32_Service.Name=\"{0}\"", serviceName)))
             {
+                Trace.WriteLine(DateTime.Now + " Setting service: " + serviceName + " to manual.");
                 mo.InvokeMethod("ChangeStartMode", new object[] { "Manual" });
             }
         }
