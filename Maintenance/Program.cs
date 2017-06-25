@@ -86,7 +86,7 @@ namespace Maintenance
                                     twtl.Dispose();
                                 }
                             }
-                            Trace.WriteLine(DateTime.Now + " Application has started");
+                            Trace.WriteLine("-- Application has started " + DateTime.Now);
                         }
                     }
                 }
@@ -238,6 +238,7 @@ namespace Maintenance
                         var filesPath = Environment.ExpandEnvironmentVariables(Variable);
                         if (filesPath != "")
                         {
+                            // Files to delete
                             foreach (string d in Directory.GetDirectories(filesPath))
                             {
                                 foreach (string f in Directory.GetFiles(d))
@@ -272,80 +273,80 @@ namespace Maintenance
                                                     continue;
                                                 }
                                             }
-                                            else
-                                            {
-                                                try
-                                                {
-                                                    FileInfo fi = new FileInfo(f);
-                                                    if (fi.CreationTime < DateTime.Now.AddDays(-1))
-                                                    {
-                                                        Trace.WriteLine(DateTime.Now + " Deleting file: " + f);
-                                                        File.Delete(f);
-                                                    }
-                                                }
-                                                catch (UnauthorizedAccessException)
-                                                {
-                                                    continue;
-                                                }
-                                                catch (FileNotFoundException)
-                                                {
-                                                    continue;
-                                                }
-                                                catch (IOException)
-                                                {
-                                                    continue;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        try
-                                        {
-                                            FileInfo fi = new FileInfo(f);
-                                            if (fi.CreationTime < DateTime.Now.AddDays(-1))
-                                            {
-                                                Trace.WriteLine(DateTime.Now + " Deleting file: " + f);
-                                                File.Delete(f);
-                                            }
-                                        }
-                                        catch (UnauthorizedAccessException)
-                                        {
-                                            continue;
-                                        }
-                                        catch (FileNotFoundException)
-                                        {
-                                            continue;
-                                        }
-                                        catch (IOException)
-                                        {
-                                            continue;
                                         }
                                     }
                                 }
                             }
-                            foreach (string directory in Directory.GetDirectories(filesPath))
+                            foreach (string file in Directory.GetFiles(filesPath))
                             {
-                                try
+                                if (PathFilesToDeleteDays != null)
                                 {
-                                    DirectoryInfo di = new DirectoryInfo(directory);
-                                    if (di.CreationTime < DateTime.Now.AddDays(-1))
+                                    foreach (var days in PathFilesToDeleteDays)
                                     {
-                                        Trace.WriteLine(DateTime.Now + " Deleting directory: " + directory);
-                                        Directory.Delete(directory, true);
+                                        string DaysNumberValue = PathFilesToDeleteDays.GetValues(days.ToString()).FirstOrDefault();
+                                        int DaysNumber = Convert.ToInt32(DaysNumberValue);
+                                        if (paths.ToString() == days.ToString())
+                                        {
+                                            try
+                                            {
+                                                FileInfo fi = new FileInfo(file);
+                                                if (fi.CreationTime < DateTime.Now.AddDays(-DaysNumber))
+                                                {
+                                                    Trace.WriteLine(DateTime.Now + " Deleting file: " + file);
+                                                    File.Delete(file);
+                                                }
+                                            }
+                                            catch (UnauthorizedAccessException)
+                                            {
+                                                continue;
+                                            }
+                                            catch (FileNotFoundException)
+                                            {
+                                                continue;
+                                            }
+                                            catch (IOException)
+                                            {
+                                                continue;
+                                            }
+                                        }
                                     }
                                 }
-                                catch (UnauthorizedAccessException)
+                            }
+                            // Directories to delete
+                            foreach (string d in Directory.GetDirectories(filesPath))
+                            {
+                                if (PathFilesToDeleteDays != null)
                                 {
-                                    continue;
-                                }
-                                catch (DirectoryNotFoundException)
-                                {
-                                    continue;
-                                }
-                                catch (IOException)
-                                {
-                                    continue;
+                                    foreach (var days in PathFilesToDeleteDays)
+                                    {
+                                        string DaysNumberValue = PathFilesToDeleteDays.GetValues(days.ToString()).FirstOrDefault();
+                                        int DaysNumber = Convert.ToInt32(DaysNumberValue);
+
+                                        if (paths.ToString() == days.ToString())
+                                        {
+                                            try
+                                            {
+                                                DirectoryInfo fi = new DirectoryInfo(d);
+                                                if (fi.CreationTime < DateTime.Now.AddDays(-DaysNumber))
+                                                {
+                                                    Trace.WriteLine(DateTime.Now + " Deleting file: " + d);
+                                                    Directory.Delete(d, true);
+                                                }
+                                            }
+                                            catch (UnauthorizedAccessException)
+                                            {
+                                                continue;
+                                            }
+                                            catch (FileNotFoundException)
+                                            {
+                                                continue;
+                                            }
+                                            catch (IOException)
+                                            {
+                                                continue;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
