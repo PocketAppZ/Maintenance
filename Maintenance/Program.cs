@@ -92,7 +92,8 @@ namespace Maintenance
                 }
             }
             // Run Disk Check once a month before 11 am on Monday
-            if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && DateTime.Now.Hour <= 11)
+            string checkFile = "C:\\check";
+            if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && DateTime.Now.Hour <= 11 && !File.Exists(checkFile))
             {
                 Trace.WriteLine(DateTime.Now + " Scheduling a disk check to run at next reboot.");
                 using (Process process = new Process())
@@ -103,6 +104,18 @@ namespace Maintenance
                     process.Start();
                     process.WaitForExit();
                 }
+                File.Create(checkFile);
+                FileAttributes attributes = File.GetAttributes(checkFile);
+                if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
+                {
+                    Trace.WriteLine(DateTime.Now + " Hiding file: " + checkFile);
+                    File.SetAttributes(checkFile, File.GetAttributes(checkFile) | FileAttributes.Hidden);
+                    File.SetAttributes(checkFile, File.GetAttributes(checkFile) | FileAttributes.System);
+                }
+            }
+            if (today.DayOfWeek == DayOfWeek.Tuesday && today.Day > 6)
+            {
+                File.Delete(checkFile);
             }
             // Disable Tasks
             if (TasksToDisable != null)
