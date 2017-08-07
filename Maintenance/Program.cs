@@ -21,8 +21,11 @@ namespace Maintenance
         [STAThread]
         static void Main()
         {
-            File.Copy(LogFile, LogBak);
-            File.Delete(LogFile);
+            if (File.Exists(LogFile))
+            {
+                File.Copy(LogFile, LogBak, true);
+                File.Delete(LogFile);
+            }
             // App.config Values
             var PathFilesToDelete = ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection;
             var PathFilesToDeleteOlder = ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection;
