@@ -82,9 +82,9 @@ namespace Maintenance
                     }
                 }
             }
-            // Run Disk Check once a month before 11 am on Monday
+            // Run Disk Check once a month on next reboot from Monday's first boot up
             string checkFile = "C:\\check";
-            if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && DateTime.Now.Hour <= 11 && !File.Exists(checkFile))
+            if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && !File.Exists(checkFile))
             {
                 Trace.WriteLine(DateTime.Now + " Scheduling a disk check to run at next reboot.");
                 using (Process process = new Process())
