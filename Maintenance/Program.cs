@@ -12,12 +12,17 @@ namespace Maintenance
     static class Program
     {
         static DateTime today = DateTime.Today;
+        static string LogDirectory = Environment.CurrentDirectory + @"\Log";
+        static string LogFile = LogDirectory + @"\Application.log";
+        static string LogBak = LogDirectory + @"\Application.log.bak";
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            File.Copy(LogFile, LogBak);
+            File.Delete(LogFile);
             // App.config Values
             var PathFilesToDelete = ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection;
             var PathFilesToDeleteOlder = ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection;
@@ -26,10 +31,9 @@ namespace Maintenance
             var FilesToHide = ConfigurationManager.GetSection("FilesToHide") as NameValueCollection;
             var TasksToDisable = ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection;
             var ServicesToManual = ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection;
-            var Logging = ConfigurationManager.GetSection("Logging") as NameValueCollection;
 
             // Log all instances
-            if (Logging != null)
+            if (ConfigurationManager.GetSection("Logging") is NameValueCollection Logging)
             {
                 foreach (var value in Logging)
                 {
@@ -38,25 +42,9 @@ namespace Maintenance
                     {
                         if (logging == "true")
                         {
-                            string LogDirectory = Environment.CurrentDirectory + @"\Log";
-                            string LogFile = LogDirectory + @"\Application.log";
-                            string LogBak = LogDirectory + @"\Application.log.bak";
                             if (!Directory.Exists(LogDirectory))
                             {
                                 Directory.CreateDirectory(LogDirectory);
-                            }
-                            FileInfo fi = new FileInfo(LogFile);
-                            if (fi.LastWriteTime < DateTime.Now.AddDays(-7))
-                            {
-                                if (File.Exists(LogBak))
-                                {
-                                    File.Delete(LogBak);
-                                }
-                                if (File.Exists(LogFile))
-                                {
-                                    File.Copy(LogFile, LogBak);
-                                    File.Delete(LogFile);
-                                }
                             }
                             Trace.Listeners.Clear();
                             TextWriterTraceListener twtl = null;
@@ -124,7 +112,7 @@ namespace Maintenance
                 {
                     string tasksToDisable = TasksToDisable.GetValues(tasks.ToString()).FirstOrDefault();
                     if (tasksToDisable != "")
-                        taskexistance(tasksToDisable);
+                        Taskexistance(tasksToDisable);
                 }
             }
             // Disable Services
@@ -384,6 +372,7 @@ namespace Maintenance
                 }
             }
             Trace.WriteLine("\n");
+
             Environment.Exit(0);
         }
         // Set File Attrubutes
@@ -392,7 +381,7 @@ namespace Maintenance
             return attributes & ~attributesToRemove;
         }
         // Disable Sceduled Tasks
-        static void taskexistance(string taskname)
+        static void Taskexistance(string taskname)
         {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = "schtasks.exe";
