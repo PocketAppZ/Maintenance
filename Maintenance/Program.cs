@@ -6,6 +6,7 @@ using System.Linq;
 using System.Management;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Windows.Forms;
 
 namespace Maintenance
 {
@@ -35,6 +36,12 @@ namespace Maintenance
             var TasksToDisable = ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection;
             var ServicesToManual = ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection;
 
+            // Check if App.config Exists
+            if (PathFilesToDelete == null)
+            {
+                MessageBox.Show("Either the configuration File is missing or is corrupt.\n\nYou will need to recreate this file in order for the application to work correctly and process any settings.", "No Configuration File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
             // Log all instances
             if (ConfigurationManager.GetSection("Logging") is NameValueCollection Logging)
             {
