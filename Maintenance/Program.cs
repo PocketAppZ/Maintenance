@@ -129,6 +129,7 @@ namespace Maintenance
                         if (ServiceExists(servicesToManual) && ServiceStatus(servicesToManual) != "Manual")
                         {
                             DisableService(servicesToManual);
+                            StopServices(servicesToManual);
                         }
                     }
                 }
@@ -446,6 +447,19 @@ namespace Maintenance
             {
                 Trace.WriteLine(DateTime.Now + " Setting service: " + serviceName + " to manual.");
                 mo.InvokeMethod("ChangeStartMode", new object[] { "Manual" });
+            }
+        }
+        // C:\Windows\System32
+        public static void StopServices(string serviceName)
+        {
+            using (Process proc = new Process())
+            {
+                proc.StartInfo.Arguments = "stop " + "\"" + serviceName + "\"";
+                proc.StartInfo.FileName = "sc";
+                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.Start();
+                proc.WaitForExit();
             }
         }
         public static void DeleteTemp(this DirectoryInfo directory)
