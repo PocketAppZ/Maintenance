@@ -16,6 +16,7 @@ namespace Maintenance
         static string LogDirectory = Environment.CurrentDirectory + @"\Log";
         static string LogFile = LogDirectory + @"\Application.log";
         static string LogBak = LogDirectory + @"\Application.log.bak";
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -27,17 +28,8 @@ namespace Maintenance
                 File.Copy(LogFile, LogBak, true);
                 File.Delete(LogFile);
             }
-            // App.config Values
-            var PathFilesToDelete = ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection;
-            var PathFilesToDeleteOlder = ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection;
-            var PathFilesToDeleteDays = ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection;
-            var FilesToDelete = ConfigurationManager.GetSection("FilesToDelete") as NameValueCollection;
-            var FilesToHide = ConfigurationManager.GetSection("FilesToHide") as NameValueCollection;
-            var TasksToDisable = ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection;
-            var ServicesToManual = ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection;
-
             // Check if App.config Exists
-            if (PathFilesToDelete == null)
+            if (ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection == null)
             {
                 MessageBox.Show("Either the configuration File is missing or is corrupt.\n\nYou will need to recreate this file in order for the application to work correctly and process any settings.", "No Configuration File", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
@@ -90,7 +82,7 @@ namespace Maintenance
                 }
             }
             // Run Disk Check once a month on next reboot from Monday's first boot up
-            string checkFile = "C:\\check";
+            string checkFile = "C:\\checkFile";
             if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && !File.Exists(checkFile))
             {
                 Trace.WriteLine(DateTime.Now + " Scheduling a disk check to run at next reboot.");
@@ -111,26 +103,26 @@ namespace Maintenance
                     File.SetAttributes(checkFile, File.GetAttributes(checkFile) | FileAttributes.System);
                 }
             }
-            if (today.DayOfWeek == DayOfWeek.Tuesday && today.Day > 6)
+            if (today.DayOfWeek == DayOfWeek.Tuesday && today.Day > 7 && File.Exists(checkFile))
             {
                 File.Delete(checkFile);
             }
             // Disable Tasks
-            if (TasksToDisable != null)
+            if (ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection != null)
             {
-                foreach (var tasks in TasksToDisable)
+                foreach (var tasks in ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection)
                 {
-                    string tasksToDisable = TasksToDisable.GetValues(tasks.ToString()).FirstOrDefault();
+                    string tasksToDisable = (ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection).GetValues(tasks.ToString()).FirstOrDefault();
                     if (tasksToDisable != "")
                         Taskexistance(tasksToDisable);
                 }
             }
             // Disable Services
-            if (ServicesToManual != null)
+            if (ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection != null)
             {
-                foreach (var services in ServicesToManual)
+                foreach (var services in ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection)
                 {
-                    string servicesToManual = ServicesToManual.GetValues(services.ToString()).FirstOrDefault();
+                    string servicesToManual = (ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection).GetValues(services.ToString()).FirstOrDefault();
                     if (servicesToManual != "")
                     {
                         if (ServiceExists(servicesToManual) && ServiceStatus(servicesToManual) != "Manual")
@@ -142,11 +134,11 @@ namespace Maintenance
                 }
             }
             // Hide Files
-            if (FilesToHide != null)
+            if (ConfigurationManager.GetSection("FilesToHide") as NameValueCollection != null)
             {
-                foreach (var hide in FilesToHide)
+                foreach (var hide in ConfigurationManager.GetSection("FilesToHide") as NameValueCollection)
                 {
-                    string filesToHide = FilesToHide.GetValues(hide.ToString()).FirstOrDefault();
+                    string filesToHide = (ConfigurationManager.GetSection("FilesToHide") as NameValueCollection).GetValues(hide.ToString()).FirstOrDefault();
                     var Variable = filesToHide;
                     var filePath = Environment.ExpandEnvironmentVariables(Variable);
                     if (filePath != "")
@@ -175,14 +167,14 @@ namespace Maintenance
                 }
             }
             // Delete Files and Folders in a Directory
-            if (PathFilesToDelete != null)
+            if (ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection != null)
             {
                 int deleteTemp = 0;
-                foreach (var paths in PathFilesToDelete)
+                foreach (var paths in ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection)
                 {
                     try
                     {
-                        string Variable = PathFilesToDelete.GetValues(paths.ToString()).FirstOrDefault();
+                        string Variable = (ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection).GetValues(paths.ToString()).FirstOrDefault();
                         var filesPath = Environment.ExpandEnvironmentVariables(Variable);
                         if (filesPath != "")
                         {
@@ -240,13 +232,13 @@ namespace Maintenance
                 }
             }
             // Delete Files and Folders in a Directory older than 1 day
-            if (PathFilesToDeleteOlder != null)
+            if (ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection != null)
             {
-                foreach (var paths in PathFilesToDeleteOlder)
+                foreach (var paths in ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection)
                 {
                     try
                     {
-                        string Variable = PathFilesToDeleteOlder.GetValues(paths.ToString()).FirstOrDefault();
+                        string Variable = (ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection).GetValues(paths.ToString()).FirstOrDefault();
                         var filesPath = Environment.ExpandEnvironmentVariables(Variable);
                         if (filesPath != "")
                         {
@@ -255,11 +247,11 @@ namespace Maintenance
                             {
                                 foreach (string f in Directory.GetFiles(d))
                                 {
-                                    if (PathFilesToDeleteDays != null)
+                                    if (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection != null)
                                     {
-                                        foreach (var days in PathFilesToDeleteDays)
+                                        foreach (var days in ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection)
                                         {
-                                            string DaysNumberValue = PathFilesToDeleteDays.GetValues(days.ToString()).FirstOrDefault();
+                                            string DaysNumberValue = (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection).GetValues(days.ToString()).FirstOrDefault();
                                             int DaysNumber = Convert.ToInt32(DaysNumberValue);
                                             if (paths.ToString() == days.ToString())
                                             {
@@ -291,11 +283,11 @@ namespace Maintenance
                             }
                             foreach (string file in Directory.GetFiles(filesPath))
                             {
-                                if (PathFilesToDeleteDays != null)
+                                if (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection != null)
                                 {
-                                    foreach (var days in PathFilesToDeleteDays)
+                                    foreach (var days in ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection)
                                     {
-                                        string DaysNumberValue = PathFilesToDeleteDays.GetValues(days.ToString()).FirstOrDefault();
+                                        string DaysNumberValue = (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection).GetValues(days.ToString()).FirstOrDefault();
                                         int DaysNumber = Convert.ToInt32(DaysNumberValue);
                                         if (paths.ToString() == days.ToString())
                                         {
@@ -327,11 +319,11 @@ namespace Maintenance
                             // Directories to delete
                             foreach (string d in Directory.GetDirectories(filesPath))
                             {
-                                if (PathFilesToDeleteDays != null)
+                                if (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection != null)
                                 {
-                                    foreach (var days in PathFilesToDeleteDays)
+                                    foreach (var days in ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection)
                                     {
-                                        string DaysNumberValue = PathFilesToDeleteDays.GetValues(days.ToString()).FirstOrDefault();
+                                        string DaysNumberValue = (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection).GetValues(days.ToString()).FirstOrDefault();
                                         int DaysNumber = Convert.ToInt32(DaysNumberValue);
 
                                         if (paths.ToString() == days.ToString())
@@ -370,11 +362,11 @@ namespace Maintenance
                 }
             }
             // Delete Files
-            if (FilesToDelete != null)
+            if (ConfigurationManager.GetSection("FilesToDelete") as NameValueCollection != null)
             {
-                foreach (var file in FilesToDelete)
+                foreach (var file in ConfigurationManager.GetSection("FilesToDelete") as NameValueCollection)
                 {
-                        string fileTodelete = FilesToDelete.GetValues(file.ToString()).FirstOrDefault();
+                        string fileTodelete = (ConfigurationManager.GetSection("FilesToDelete") as NameValueCollection).GetValues(file.ToString()).FirstOrDefault();
                     if (fileTodelete != "")
                     {
                         Trace.WriteLine(DateTime.Now + " Deleting file: " + fileTodelete);
