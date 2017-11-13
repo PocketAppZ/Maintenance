@@ -178,34 +178,41 @@ namespace Maintenance
                         var filesPath = Environment.ExpandEnvironmentVariables(Variable);
                         if (filesPath != "")
                         {
-                            foreach (string file in Directory.GetFiles(filesPath))
+                            try
                             {
-                                try
+                                foreach (string file in Directory.GetFiles(filesPath))
                                 {
-                                    if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
+                                    try
                                     {
-                                        Trace.WriteLine(DateTime.Now + " Deleting file: " + file);
-                                        File.Delete(file);
-                                    }
-                                    else
-                                    {
-                                        deleteTemp++;
-                                        if (deleteTemp == 1)
+                                        if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
                                         {
-                                            Trace.WriteLine(DateTime.Now + " Deleting temp files");
-                                            DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
-                                            directory.DeleteTemp();
+                                            Trace.WriteLine(DateTime.Now + " Deleting file: " + file);
+                                            File.Delete(file);
+                                        }
+                                        else
+                                        {
+                                            deleteTemp++;
+                                            if (deleteTemp == 1)
+                                            {
+                                                Trace.WriteLine(DateTime.Now + " Deleting temp files");
+                                                DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
+                                                directory.DeleteTemp();
+                                            }
                                         }
                                     }
+                                    catch (FileNotFoundException)
+                                    {
+                                        continue;
+                                    }
+                                    catch (IOException)
+                                    {
+                                        continue;
+                                    }
                                 }
-                                catch (FileNotFoundException)
-                                {
-                                    continue;
-                                }
-                                catch (IOException)
-                                {
-                                    continue;
-                                }
+                            }
+                            catch (Exception)
+                            {
+                                continue;
                             }
                             foreach (string directory in Directory.GetDirectories(filesPath))
                             {
