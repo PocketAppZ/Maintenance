@@ -7,6 +7,7 @@ using System.Management;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Maintenance
 {
@@ -16,6 +17,13 @@ namespace Maintenance
         static string LogDirectory = Environment.CurrentDirectory;
         static string LogFile = LogDirectory + @"\Application.log";
         static string LogBak = LogDirectory + @"\Application.log.bak";
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("User32.dll")]
+        static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
 
         /// <summary>
         /// The main entry point for the application.
@@ -83,6 +91,7 @@ namespace Maintenance
                         }
                     }
                 }
+
                 // Run Disk Check once a month on next reboot from Monday's first boot up
                 string checkFile = "C:\\checkFile";
                 if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && !File.Exists(checkFile))
@@ -423,6 +432,7 @@ namespace Maintenance
                 Environment.Exit(0);
             }
         }
+
         // Set File Attrubutes
         private static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
         {
