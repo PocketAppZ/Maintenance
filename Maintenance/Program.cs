@@ -17,6 +17,7 @@ namespace Maintenance
         static string LogDirectory = Environment.CurrentDirectory;
         static string LogFile = LogDirectory + @"\Application.log";
         static string LogBak = LogDirectory + @"\Application.log.bak";
+        static string[] drives = Directory.GetLogicalDrives();
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -99,11 +100,14 @@ namespace Maintenance
                     Trace.WriteLine(DateTime.Now + " Scheduling a disk check to run at next reboot.");
                     using (Process process = new Process())
                     {
-                        process.StartInfo.FileName = "CMD.exe";
-                        process.StartInfo.Arguments = "/c echo Y | chkdsk /F C:";
-                        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        process.Start();
-                        process.WaitForExit();
+                        foreach (string drive in drives)
+                        {
+                            process.StartInfo.FileName = "CMD.exe";
+                            process.StartInfo.Arguments = "/c echo Y | chkdsk /F " + drive.Replace("\\", "");
+                            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                            process.Start();
+                            process.WaitForExit();
+                        }
                     }
                     File.Create(checkFile);
                     FileAttributes attributes = File.GetAttributes(checkFile);
