@@ -7,6 +7,8 @@ namespace Maintenance
 {
     public partial class SettingsForm : Form
     {
+        #region Entry Point and Settings
+
         public SettingsForm()
         {
             InitializeComponent();
@@ -63,6 +65,8 @@ namespace Maintenance
             DiskCheckBox.CheckedChanged += DiskCheckBox_CheckedChanged;
         }
 
+        #endregion Entry Point and Settings
+
         #region CheckBoxes and Help Button
 
         private void DiskCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -95,7 +99,7 @@ namespace Maintenance
 
         private void HelpButton_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/xCONFLiCTiONx/Maintenance/#help");
+            Process.Start("https://github.com/xCONFLiCTiONx/Maintenance#help");
         }
 
         #endregion CheckBoxes and Help Button
@@ -104,11 +108,24 @@ namespace Maintenance
 
         private void DirDelBrowse_Click(object sender, EventArgs e)
         {
+            bool ItemExists = false;
+
             var selected = DirectoryBrowser();
             if (selected != null)
             {
-                DirToDelBox.Items.Add(selected);
-                Default.DirectoriesToDelete.Add(selected);
+                foreach (string item in DirToDelBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    DirToDelBox.Items.Add(selected);
+                    Default.DirectoriesToDelete.Add(selected);
+                }
             }
 
             Default.Save();
@@ -116,11 +133,24 @@ namespace Maintenance
 
         private void FilesDelBrowse_Click(object sender, EventArgs e)
         {
-            var selected = DirectoryBrowser();
+            bool ItemExists = false;
+
+            var selected = OpenFileBrowser();
             if (selected != null)
             {
-                FilesToDelBox.Items.Add(selected);
-                Default.FilesToDelete.Add(selected);
+                foreach (string item in FilesToDelBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    FilesToDelBox.Items.Add(selected);
+                    Default.FilesToDelete.Add(selected);
+                }
             }
 
             Default.Save();
@@ -128,11 +158,24 @@ namespace Maintenance
 
         private void FilesHideBrowse_Click(object sender, EventArgs e)
         {
-            var selected = DirectoryBrowser();
+            bool ItemExists = false;
+
+            var selected = OpenFileBrowser();
             if (selected != null)
             {
-                FilesHideBox.Items.Add(selected);
-                Default.FilesToHide.Add(selected);
+                foreach (string item in FilesHideBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    FilesHideBox.Items.Add(selected);
+                    Default.FilesToHide.Add(selected);
+                }
             }
 
             Default.Save();
@@ -140,11 +183,24 @@ namespace Maintenance
 
         private void PathFilesDelBrowse_Click(object sender, EventArgs e)
         {
+            bool ItemExists = false;
+
             var selected = DirectoryBrowser();
             if (selected != null)
             {
-                PathFilesDelBox.Items.Add(selected);
-                Default.PathFilesToDelete.Add(selected);
+                foreach (string item in PathFilesDelBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    PathFilesDelBox.Items.Add(selected);
+                    Default.PathFilesToDelete.Add(selected);
+                }
             }
 
             Default.Save();
@@ -152,47 +208,24 @@ namespace Maintenance
 
         private void PathFilesDelOldBrowse_Click(object sender, EventArgs e)
         {
+            bool ItemExists = false;
+
             var selected = DirectoryBrowser();
             if (selected != null)
             {
-                PathFilesDelOldBox.Items.Add(selected);
-                Default.PathFilesToDeleteOlder.Add(selected);
-            }
-
-            Default.Save();
-        }
-
-        private void ServicesDisableBrowse_Click(object sender, EventArgs e)
-        {
-            var selected = DirectoryBrowser();
-            if (selected != null)
-            {
-                ServicsDisableBox.Items.Add(selected);
-                Default.ServicesToDisable.Add(selected);
-            }
-
-            Default.Save();
-        }
-
-        private void ServicesManualBrowse_Click(object sender, EventArgs e)
-        {
-            var selected = DirectoryBrowser();
-            if (selected != null)
-            {
-                ServicesManualBox.Items.Add(selected);
-                Default.ServicesToManual.Add(selected);
-            }
-
-            Default.Save();
-        }
-
-        private void TasksDisableBrowse_Click(object sender, EventArgs e)
-        {
-            var selected = DirectoryBrowser();
-            if (selected != null)
-            {
-                TasksDisableBox.Items.Add(selected);
-                Default.TasksToDisable.Add(selected);
+                foreach (string item in PathFilesDelOldBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    PathFilesDelOldBox.Items.Add(selected);
+                    Default.PathFilesToDeleteOlder.Add(selected);
+                }
             }
 
             Default.Save();
@@ -330,6 +363,87 @@ namespace Maintenance
 
         #endregion Remove Buttons
 
+        #region Services and Tasks Buttons
+
+        private void ServicesDisableButton_Click(object sender, EventArgs e)
+        {
+            bool ItemExists = false;
+
+            var selected = ServicesTextBox.Text;
+            if (selected != null)
+            {
+                foreach (string item in ServicsDisableBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    ServicsDisableBox.Items.Add(selected);
+                    Default.ServicesToDisable.Add(selected);
+                }
+            }
+
+            Default.Save();
+        }
+
+        private void ServicesManualButton_Click(object sender, EventArgs e)
+        {
+            bool ItemExists = false;
+
+            var selected = ServicesTextBox.Text;
+            if (selected != null)
+            {
+                foreach (string item in ServicesManualBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    ServicesManualBox.Items.Add(selected);
+                    Default.ServicesToManual.Add(selected);
+                }
+            }
+
+            Default.Save();
+        }
+
+        private void TasksDisableButton_Click(object sender, EventArgs e)
+        {
+            bool ItemExists = false;
+
+            var selected = TasksTextBox.Text;
+            if (selected != null)
+            {
+                foreach (string item in TasksDisableBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    TasksDisableBox.Items.Add(selected);
+                    Default.TasksToDisable.Add(selected);
+                }
+            }
+
+            Default.Save();
+        }
+
+        #endregion Services and Tasks Buttons
+
+        #region File and Folder Browser Dialogs
+
         private string DirectoryBrowser()
         {
             string SelectedPath = string.Empty;
@@ -346,5 +460,23 @@ namespace Maintenance
 
             return SelectedPath;
         }
+        private string OpenFileBrowser()
+        {
+            string SelectedPath = string.Empty;
+
+            using (OpenFileDialog browserDialog = new OpenFileDialog())
+            {
+                browserDialog.ShowDialog();
+
+                if (browserDialog.FileName != null)
+                {
+                    SelectedPath = browserDialog.FileName;
+                }
+            }
+
+            return SelectedPath;
+        }
+
+        #endregion File and Folder Browser Dialogs
     }
 }
