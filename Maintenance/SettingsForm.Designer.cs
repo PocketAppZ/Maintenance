@@ -56,8 +56,8 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.ServicesTextBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.ServicesManualBrowse = new System.Windows.Forms.Button();
-            this.ServicesDisableBrowse = new System.Windows.Forms.Button();
+            this.ServicesManualButton = new System.Windows.Forms.Button();
+            this.ServicesDisableButton = new System.Windows.Forms.Button();
             this.ServicesManualRemove = new System.Windows.Forms.Button();
             this.ServicesDisableRemove = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
@@ -67,7 +67,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.TasksTextBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.TasksDisableBrowse = new System.Windows.Forms.Button();
+            this.TasksDisableButton = new System.Windows.Forms.Button();
             this.TasksDisableRemove = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.TasksDisableBox = new System.Windows.Forms.ComboBox();
@@ -86,6 +86,7 @@
             this.LoggingBox.TabIndex = 9;
             this.LoggingBox.Text = "Logging Enabled";
             this.LoggingBox.UseVisualStyleBackColor = true;
+            this.LoggingBox.CheckedChanged += new System.EventHandler(this.LoggingBox_CheckedChanged);
             // 
             // DiskCheckBox
             // 
@@ -96,6 +97,7 @@
             this.DiskCheckBox.TabIndex = 10;
             this.DiskCheckBox.Text = "Run Disk Check Monthly";
             this.DiskCheckBox.UseVisualStyleBackColor = true;
+            this.DiskCheckBox.CheckedChanged += new System.EventHandler(this.DiskCheckBox_CheckedChanged);
             // 
             // HelpButton
             // 
@@ -109,6 +111,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.groupBox1.Controls.Add(this.FilesHideBrowse);
             this.groupBox1.Controls.Add(this.FilesDelBrowse);
             this.groupBox1.Controls.Add(this.FilesHideRemove);
@@ -132,6 +135,7 @@
             this.FilesHideBrowse.TabIndex = 46;
             this.FilesHideBrowse.Text = "Browse";
             this.FilesHideBrowse.UseVisualStyleBackColor = true;
+            this.FilesHideBrowse.Click += new System.EventHandler(this.FilesHideBrowse_Click);
             // 
             // FilesDelBrowse
             // 
@@ -141,6 +145,7 @@
             this.FilesDelBrowse.TabIndex = 45;
             this.FilesDelBrowse.Text = "Browse";
             this.FilesDelBrowse.UseVisualStyleBackColor = true;
+            this.FilesDelBrowse.Click += new System.EventHandler(this.FilesDelBrowse_Click);
             // 
             // FilesHideRemove
             // 
@@ -150,6 +155,7 @@
             this.FilesHideRemove.TabIndex = 44;
             this.FilesHideRemove.Text = "Remove";
             this.FilesHideRemove.UseVisualStyleBackColor = true;
+            this.FilesHideRemove.Click += new System.EventHandler(this.FilesHideRemove_Click);
             // 
             // FilesDelRemove
             // 
@@ -159,6 +165,7 @@
             this.FilesDelRemove.TabIndex = 43;
             this.FilesDelRemove.Text = "Remove";
             this.FilesDelRemove.UseVisualStyleBackColor = true;
+            this.FilesDelRemove.Click += new System.EventHandler(this.FilesDelRemove_Click);
             // 
             // label3
             // 
@@ -196,6 +203,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.groupBox2.Controls.Add(this.DirDelBrowse);
             this.groupBox2.Controls.Add(this.DirDelRemove);
             this.groupBox2.Controls.Add(this.label1);
@@ -223,6 +231,7 @@
             this.DirDelBrowse.TabIndex = 57;
             this.DirDelBrowse.Text = "Browse";
             this.DirDelBrowse.UseVisualStyleBackColor = true;
+            this.DirDelBrowse.Click += new System.EventHandler(this.DirDelBrowse_Click);
             // 
             // DirDelRemove
             // 
@@ -232,6 +241,7 @@
             this.DirDelRemove.TabIndex = 56;
             this.DirDelRemove.Text = "Remove";
             this.DirDelRemove.UseVisualStyleBackColor = true;
+            this.DirDelRemove.Click += new System.EventHandler(this.DirDelRemove_Click);
             // 
             // label1
             // 
@@ -258,6 +268,7 @@
             this.PathFilesDelOldBrowse.TabIndex = 53;
             this.PathFilesDelOldBrowse.Text = "Browse";
             this.PathFilesDelOldBrowse.UseVisualStyleBackColor = true;
+            this.PathFilesDelOldBrowse.Click += new System.EventHandler(this.PathFilesDelOldBrowse_Click);
             // 
             // PathFilesDelBrowse
             // 
@@ -267,6 +278,7 @@
             this.PathFilesDelBrowse.TabIndex = 52;
             this.PathFilesDelBrowse.Text = "Browse";
             this.PathFilesDelBrowse.UseVisualStyleBackColor = true;
+            this.PathFilesDelBrowse.Click += new System.EventHandler(this.PathFilesDelBrowse_Click);
             // 
             // PathFilesDelOldRemove
             // 
@@ -276,6 +288,7 @@
             this.PathFilesDelOldRemove.TabIndex = 51;
             this.PathFilesDelOldRemove.Text = "Remove";
             this.PathFilesDelOldRemove.UseVisualStyleBackColor = true;
+            this.PathFilesDelOldRemove.Click += new System.EventHandler(this.PathFilesDelOldRemove_Click);
             // 
             // PathFilesDelRemove
             // 
@@ -285,6 +298,7 @@
             this.PathFilesDelRemove.TabIndex = 50;
             this.PathFilesDelRemove.Text = "Remove";
             this.PathFilesDelRemove.UseVisualStyleBackColor = true;
+            this.PathFilesDelRemove.Click += new System.EventHandler(this.PathFilesDelRemove_Click);
             // 
             // label5
             // 
@@ -322,10 +336,11 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.groupBox3.Controls.Add(this.ServicesTextBox);
             this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Controls.Add(this.ServicesManualBrowse);
-            this.groupBox3.Controls.Add(this.ServicesDisableBrowse);
+            this.groupBox3.Controls.Add(this.ServicesManualButton);
+            this.groupBox3.Controls.Add(this.ServicesDisableButton);
             this.groupBox3.Controls.Add(this.ServicesManualRemove);
             this.groupBox3.Controls.Add(this.ServicesDisableRemove);
             this.groupBox3.Controls.Add(this.label7);
@@ -355,23 +370,25 @@
             this.label9.TabIndex = 59;
             this.label9.Text = "Service Name:";
             // 
-            // ServicesManualBrowse
+            // ServicesManualButton
             // 
-            this.ServicesManualBrowse.Location = new System.Drawing.Point(500, 90);
-            this.ServicesManualBrowse.Name = "ServicesManualBrowse";
-            this.ServicesManualBrowse.Size = new System.Drawing.Size(82, 23);
-            this.ServicesManualBrowse.TabIndex = 58;
-            this.ServicesManualBrowse.Text = "Manual";
-            this.ServicesManualBrowse.UseVisualStyleBackColor = true;
+            this.ServicesManualButton.Location = new System.Drawing.Point(500, 90);
+            this.ServicesManualButton.Name = "ServicesManualButton";
+            this.ServicesManualButton.Size = new System.Drawing.Size(82, 23);
+            this.ServicesManualButton.TabIndex = 58;
+            this.ServicesManualButton.Text = "Manual";
+            this.ServicesManualButton.UseVisualStyleBackColor = true;
+            this.ServicesManualButton.Click += new System.EventHandler(this.ServicesManualButton_Click);
             // 
-            // ServicesDisableBrowse
+            // ServicesDisableButton
             // 
-            this.ServicesDisableBrowse.Location = new System.Drawing.Point(412, 90);
-            this.ServicesDisableBrowse.Name = "ServicesDisableBrowse";
-            this.ServicesDisableBrowse.Size = new System.Drawing.Size(82, 23);
-            this.ServicesDisableBrowse.TabIndex = 57;
-            this.ServicesDisableBrowse.Text = "Disabled";
-            this.ServicesDisableBrowse.UseVisualStyleBackColor = true;
+            this.ServicesDisableButton.Location = new System.Drawing.Point(412, 90);
+            this.ServicesDisableButton.Name = "ServicesDisableButton";
+            this.ServicesDisableButton.Size = new System.Drawing.Size(82, 23);
+            this.ServicesDisableButton.TabIndex = 57;
+            this.ServicesDisableButton.Text = "Disabled";
+            this.ServicesDisableButton.UseVisualStyleBackColor = true;
+            this.ServicesDisableButton.Click += new System.EventHandler(this.ServicesDisableButton_Click);
             // 
             // ServicesManualRemove
             // 
@@ -381,6 +398,7 @@
             this.ServicesManualRemove.TabIndex = 56;
             this.ServicesManualRemove.Text = "Remove";
             this.ServicesManualRemove.UseVisualStyleBackColor = true;
+            this.ServicesManualRemove.Click += new System.EventHandler(this.ServicesManualRemove_Click);
             // 
             // ServicesDisableRemove
             // 
@@ -390,6 +408,7 @@
             this.ServicesDisableRemove.TabIndex = 55;
             this.ServicesDisableRemove.Text = "Remove";
             this.ServicesDisableRemove.UseVisualStyleBackColor = true;
+            this.ServicesDisableRemove.Click += new System.EventHandler(this.ServicesDisableRemove_Click);
             // 
             // label7
             // 
@@ -427,9 +446,10 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.BackColor = System.Drawing.SystemColors.ControlLight;
             this.groupBox4.Controls.Add(this.TasksTextBox);
             this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.TasksDisableBrowse);
+            this.groupBox4.Controls.Add(this.TasksDisableButton);
             this.groupBox4.Controls.Add(this.TasksDisableRemove);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.TasksDisableBox);
@@ -456,14 +476,15 @@
             this.label10.TabIndex = 46;
             this.label10.Text = "Task Name:";
             // 
-            // TasksDisableBrowse
+            // TasksDisableButton
             // 
-            this.TasksDisableBrowse.Location = new System.Drawing.Point(412, 61);
-            this.TasksDisableBrowse.Name = "TasksDisableBrowse";
-            this.TasksDisableBrowse.Size = new System.Drawing.Size(82, 23);
-            this.TasksDisableBrowse.TabIndex = 45;
-            this.TasksDisableBrowse.Text = "Disabled";
-            this.TasksDisableBrowse.UseVisualStyleBackColor = true;
+            this.TasksDisableButton.Location = new System.Drawing.Point(412, 61);
+            this.TasksDisableButton.Name = "TasksDisableButton";
+            this.TasksDisableButton.Size = new System.Drawing.Size(82, 23);
+            this.TasksDisableButton.TabIndex = 45;
+            this.TasksDisableButton.Text = "Disabled";
+            this.TasksDisableButton.UseVisualStyleBackColor = true;
+            this.TasksDisableButton.Click += new System.EventHandler(this.TasksDisableButton_Click);
             // 
             // TasksDisableRemove
             // 
@@ -473,6 +494,7 @@
             this.TasksDisableRemove.TabIndex = 44;
             this.TasksDisableRemove.Text = "Remove";
             this.TasksDisableRemove.UseVisualStyleBackColor = true;
+            this.TasksDisableRemove.Click += new System.EventHandler(this.TasksDisableRemove_Click);
             // 
             // label8
             // 
@@ -553,8 +575,8 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox ServicesTextBox;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button ServicesManualBrowse;
-        private System.Windows.Forms.Button ServicesDisableBrowse;
+        private System.Windows.Forms.Button ServicesManualButton;
+        private System.Windows.Forms.Button ServicesDisableButton;
         private System.Windows.Forms.Button ServicesManualRemove;
         private System.Windows.Forms.Button ServicesDisableRemove;
         private System.Windows.Forms.Label label7;
@@ -564,7 +586,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TextBox TasksTextBox;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button TasksDisableBrowse;
+        private System.Windows.Forms.Button TasksDisableButton;
         private System.Windows.Forms.Button TasksDisableRemove;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox TasksDisableBox;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows.Forms;
 using static Maintenance.Properties.Settings;
@@ -108,127 +109,27 @@ namespace Maintenance
 
         private void DirDelBrowse_Click(object sender, EventArgs e)
         {
-            bool ItemExists = false;
-
-            var selected = DirectoryBrowser();
-            if (selected != null)
-            {
-                foreach (string item in DirToDelBox.Items)
-                {
-                    if (item == selected)
-                    {
-                        ItemExists = true;
-                        break;
-                    }
-                }
-                if (!ItemExists)
-                {
-                    DirToDelBox.Items.Add(selected);
-                    Default.DirectoriesToDelete.Add(selected);
-                }
-            }
-
-            Default.Save();
+            DirectoryBrowser(DirToDelBox, Default.DirectoriesToDelete);
         }
 
         private void FilesDelBrowse_Click(object sender, EventArgs e)
         {
-            bool ItemExists = false;
-
-            var selected = OpenFileBrowser();
-            if (selected != null)
-            {
-                foreach (string item in FilesToDelBox.Items)
-                {
-                    if (item == selected)
-                    {
-                        ItemExists = true;
-                        break;
-                    }
-                }
-                if (!ItemExists)
-                {
-                    FilesToDelBox.Items.Add(selected);
-                    Default.FilesToDelete.Add(selected);
-                }
-            }
-
-            Default.Save();
+            FileBrowser(FilesToDelBox, Default.FilesToDelete);
         }
 
         private void FilesHideBrowse_Click(object sender, EventArgs e)
         {
-            bool ItemExists = false;
-
-            var selected = OpenFileBrowser();
-            if (selected != null)
-            {
-                foreach (string item in FilesHideBox.Items)
-                {
-                    if (item == selected)
-                    {
-                        ItemExists = true;
-                        break;
-                    }
-                }
-                if (!ItemExists)
-                {
-                    FilesHideBox.Items.Add(selected);
-                    Default.FilesToHide.Add(selected);
-                }
-            }
-
-            Default.Save();
+            FileBrowser(FilesHideBox, Default.FilesToHide);
         }
 
         private void PathFilesDelBrowse_Click(object sender, EventArgs e)
         {
-            bool ItemExists = false;
-
-            var selected = DirectoryBrowser();
-            if (selected != null)
-            {
-                foreach (string item in PathFilesDelBox.Items)
-                {
-                    if (item == selected)
-                    {
-                        ItemExists = true;
-                        break;
-                    }
-                }
-                if (!ItemExists)
-                {
-                    PathFilesDelBox.Items.Add(selected);
-                    Default.PathFilesToDelete.Add(selected);
-                }
-            }
-
-            Default.Save();
+            DirectoryBrowser(PathFilesDelBox, Default.PathFilesToDelete);
         }
 
         private void PathFilesDelOldBrowse_Click(object sender, EventArgs e)
         {
-            bool ItemExists = false;
-
-            var selected = DirectoryBrowser();
-            if (selected != null)
-            {
-                foreach (string item in PathFilesDelOldBox.Items)
-                {
-                    if (item == selected)
-                    {
-                        ItemExists = true;
-                        break;
-                    }
-                }
-                if (!ItemExists)
-                {
-                    PathFilesDelOldBox.Items.Add(selected);
-                    Default.PathFilesToDeleteOlder.Add(selected);
-                }
-            }
-
-            Default.Save();
+            DirectoryBrowser(PathFilesDelOldBox, Default.PathFilesToDeleteOlder);
         }
 
         #endregion Browse Buttons
@@ -444,37 +345,69 @@ namespace Maintenance
 
         #region File and Folder Browser Dialogs
 
-        private string DirectoryBrowser()
+        private void DirectoryBrowser(ComboBox comboBox, StringCollection collection)
         {
-            string SelectedPath = string.Empty;
-
             using (FolderBrowserDialog browserDialog = new FolderBrowserDialog())
             {
-                browserDialog.ShowDialog();
-
-                if (browserDialog.SelectedPath != null)
+                DialogResult result = browserDialog.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    SelectedPath = browserDialog.SelectedPath;
+                    string SelectedPath = browserDialog.SelectedPath;
+
+                    bool ItemExists = false;
+
+                    if (SelectedPath != null)
+                    {
+                        foreach (string item in comboBox.Items)
+                        {
+                            if (item == SelectedPath)
+                            {
+                                ItemExists = true;
+                                break;
+                            }
+                        }
+                        if (!ItemExists)
+                        {
+                            comboBox.Items.Add(SelectedPath);
+                            collection.Add(SelectedPath);
+                        }
+                    }
+
+                    Default.Save();
                 }
             }
-
-            return SelectedPath;
         }
-        private string OpenFileBrowser()
+        private void FileBrowser(ComboBox comboBox, StringCollection collection)
         {
-            string SelectedPath = string.Empty;
-
             using (OpenFileDialog browserDialog = new OpenFileDialog())
             {
-                browserDialog.ShowDialog();
-
-                if (browserDialog.FileName != null)
+                DialogResult result = browserDialog.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    SelectedPath = browserDialog.FileName;
+                    string SelectedPath = browserDialog.FileName;
+
+                    bool ItemExists = false;
+
+                    if (SelectedPath != null)
+                    {
+                        foreach (string item in comboBox.Items)
+                        {
+                            if (item == SelectedPath)
+                            {
+                                ItemExists = true;
+                                break;
+                            }
+                        }
+                        if (!ItemExists)
+                        {
+                            comboBox.Items.Add(SelectedPath);
+                            collection.Add(SelectedPath);
+                        }
+                    }
+
+                    Default.Save();
                 }
             }
-
-            return SelectedPath;
         }
 
         #endregion File and Folder Browser Dialogs
