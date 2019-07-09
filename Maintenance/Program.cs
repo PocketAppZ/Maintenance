@@ -39,60 +39,13 @@ namespace Maintenance
                 {
                     string A0 = args[0].ToLower();
 
-                    // Run Settings and Close
-                    if (args[0] == "/Settings" || args[0] == "-Settings")
+                    if (args[0] == "/Logon" || args[0] == "-Logon")
                     {
-                        SettingsForm settings = new SettingsForm();
-                        settings.ShowDialog();
+                        StartLightCleanup();
                     }
                     else
                     {
-                        if (Default.LoggingEnabled)
-                        {
-                            Logging.Log();
-                        }
-
-                        if (Default.RunDiskCheckMonthly)
-                        {
-                            Logging.Info("*********************  Schedule Disck Check  *********************" + Environment.NewLine, "FullCheckup");
-                            DiskCheck.ScheduleCheck();
-                        }
-
-                        if (Default.TasksToDisable.Count > 0)
-                        {
-                            Logging.Info("*********************  Disable Scheduled Tasks  *********************" + Environment.NewLine, "FullCheckup");
-                            DisableTasks.SetTasks();
-                        }
-
-                        if (Default.ServicesToManual.Count > 0 || Default.ServicesToDisable.Count > 0)
-                        {
-                            Logging.Info("*********************  Unused Services To Manual  *********************" + Environment.NewLine, "FullCheckup");
-                            DisableServices.SetServices();
-                        }
-
-                        if (Default.FilesToHide.Count > 0)
-                        {
-                            Logging.Info("*********************  Set Files to Hidden  *********************" + Environment.NewLine, "FullCheckup");
-                            HideFiles.SetAsHidden();
-                        }
-
-                        if (Default.PathFilesToDelete.Count > 0)
-                        {
-                            Logging.Info("*********************  Delete Files In Directory  *********************" + Environment.NewLine, "FullCheckup");
-                            DeleteInDirectory.DeleteSetFiles();
-                        }
-
-                        if (Default.PathFilesToDeleteOlder.Count > 0)
-                        {
-                            Logging.Info("*********************  DeleteInDirectoryOlder.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
-                            DeleteInDirectoryOlder.DeleteSetFiles();
-                        }
-
-                        if (Default.FilesToDelete.Count > 0)
-                        {
-                            Logging.Info("*********************  DeleteFiles.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
-                            DeleteFiles.DeleteSetFiles();
-                        }
+                        StartLightCleanup();
 
                         // Get conditions for Full Checkup
                         if (args.Length > 1)
@@ -141,8 +94,64 @@ namespace Maintenance
                     throw;
                 }
             }
+            else
+            {
+                // Run Settings and Close
+                SettingsForm settings = new SettingsForm();
+                settings.ShowDialog();
+            }
 
             Environment.Exit(0);
+        }
+
+        private static void StartLightCleanup()
+        {
+            if (Default.LoggingEnabled)
+            {
+                Logging.Log();
+            }
+
+            if (Default.RunDiskCheckMonthly)
+            {
+                Logging.Info("*********************  Schedule Disck Check  *********************" + Environment.NewLine, "FullCheckup");
+                DiskCheck.ScheduleCheck();
+            }
+
+            if (Default.TasksToDisable.Count > 0)
+            {
+                Logging.Info("*********************  Disable Scheduled Tasks  *********************" + Environment.NewLine, "FullCheckup");
+                DisableTasks.SetTasks();
+            }
+
+            if (Default.ServicesToManual.Count > 0 || Default.ServicesToDisable.Count > 0)
+            {
+                Logging.Info("*********************  Unused Services To Manual  *********************" + Environment.NewLine, "FullCheckup");
+                DisableServices.SetServices();
+            }
+
+            if (Default.FilesToHide.Count > 0)
+            {
+                Logging.Info("*********************  Set Files to Hidden  *********************" + Environment.NewLine, "FullCheckup");
+                HideFiles.SetAsHidden();
+            }
+
+            if (Default.PathFilesToDelete.Count > 0)
+            {
+                Logging.Info("*********************  Delete Files In Directory  *********************" + Environment.NewLine, "FullCheckup");
+                DeleteInDirectory.DeleteSetFiles();
+            }
+
+            if (Default.PathFilesToDeleteOlder.Count > 0)
+            {
+                Logging.Info("*********************  DeleteInDirectoryOlder.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
+                DeleteInDirectoryOlder.DeleteSetFiles();
+            }
+
+            if (Default.FilesToDelete.Count > 0)
+            {
+                Logging.Info("*********************  DeleteFiles.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
+                DeleteFiles.DeleteSetFiles();
+            }
         }
     }
 }
