@@ -62,11 +62,93 @@ namespace Maintenance
             LoggingBox.Checked = Default.LoggingEnabled;
             DiskCheckBox.Checked = Default.RunDiskCheckMonthly;
 
-            LoggingBox.CheckedChanged += LoggingBox_CheckedChanged;
-            DiskCheckBox.CheckedChanged += DiskCheckBox_CheckedChanged;
+            Subscribe();
         }
 
         #endregion Entry Point and Settings
+
+        #region Subscriptions
+
+        private void Subscribe()
+        {
+            LoggingBox.CheckedChanged += LoggingBox_CheckedChanged;
+            DiskCheckBox.CheckedChanged += DiskCheckBox_CheckedChanged;
+
+            FilesToDelBox.KeyDown += FilesToDelBox_KeyDown;
+            FilesHideBox.KeyDown += FilesHideBox_KeyDown;
+            DirToDelBox.KeyDown += DirToDelBox_KeyDown;
+            PathFilesDelBox.KeyDown += PathFilesDelBox_KeyDown;
+            PathFilesDelOldBox.KeyDown += PathFilesDelOldBox_KeyDown;
+            ServicsDisableBox.KeyDown += ServicsDisableBox_KeyDown;
+            ServicesManualBox.KeyDown += ServicesManualBox_KeyDown;
+            TasksDisableBox.KeyDown += TasksDisableBox_KeyDown;
+        }
+
+        private void FilesToDelBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(FilesToDelBox, Default.FilesToDelete);
+            }
+        }
+
+        private void FilesHideBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(FilesHideBox, Default.FilesToHide);
+            }
+        }
+
+        private void DirToDelBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(DirToDelBox, Default.DirectoriesToDelete);
+            }
+        }
+
+        private void PathFilesDelBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(PathFilesDelBox, Default.PathFilesToDelete);
+            }
+        }
+
+        private void PathFilesDelOldBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(PathFilesDelOldBox, Default.PathFilesToDeleteOlder);
+            }
+        }
+
+        private void ServicsDisableBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(ServicsDisableBox, Default.ServicesToDisable);
+            }
+        }
+
+        private void ServicesManualBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(ServicesManualBox, Default.ServicesToManual);
+            }
+        }
+
+        private void TasksDisableBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuest(FilesToDelBox, Default.FilesToDelete);
+            }
+        }
+
+        #endregion Subscriptions
 
         #region CheckBoxes and Help Button
 
@@ -154,112 +236,177 @@ namespace Maintenance
 
         private void FilesDelRemove_Click(object sender, EventArgs e)
         {
-            FilesToDelBox.Items.Remove(FilesToDelBox.SelectedItem);
-            foreach (string item in Default.FilesToDelete)
+            if (FilesToDelBox.SelectedItem != null)
             {
-                if (item == FilesToDelBox.SelectedItem.ToString())
+                foreach (var item in Default.FilesToDelete)
                 {
-                    Default.FilesToDelete.Remove(item);
+                    if (item == FilesToDelBox.SelectedItem.ToString())
+                    {
+                        Default.FilesToDelete.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
 
-                    break;
+                FilesToDelBox.Items.Clear();
+                FilesToDelBox.Text = "";
+
+                foreach (var item in Default.FilesToDelete)
+                {
+                    FilesToDelBox.Items.Add(item);
                 }
             }
-
-            Default.Save();
         }
 
         private void FilesHideRemove_Click(object sender, EventArgs e)
         {
-            FilesHideBox.Items.Remove(FilesHideBox.SelectedItem);
-            foreach (string item in Default.FilesToHide)
+            if (FilesHideBox.SelectedItem != null)
             {
-                if (item == FilesHideBox.SelectedItem.ToString())
+                foreach (var item in Default.FilesToHide)
                 {
-                    Default.FilesToHide.Remove(item);
+                    if (item == FilesHideBox.SelectedItem.ToString())
+                    {
+                        Default.FilesToHide.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
 
-                    break;
+                FilesHideBox.Items.Clear();
+                FilesHideBox.Text = "";
+
+                foreach (var item in Default.FilesToHide)
+                {
+                    FilesHideBox.Items.Add(item);
                 }
             }
-
-            Default.Save();
         }
 
         private void PathFilesDelRemove_Click(object sender, EventArgs e)
         {
-            PathFilesDelBox.Items.Remove(PathFilesDelBox.SelectedItem);
-            foreach (string item in Default.PathFilesToDelete)
+            if (PathFilesDelBox.SelectedItem != null)
             {
-                if (item == PathFilesDelBox.SelectedItem.ToString())
+                foreach (var item in Default.PathFilesToDelete)
                 {
-                    Default.PathFilesToDelete.Remove(item);
+                    if (item == PathFilesDelBox.SelectedItem.ToString())
+                    {
+                        Default.PathFilesToDelete.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
 
-                    break;
+                PathFilesDelBox.Items.Clear();
+                PathFilesDelBox.Text = "";
+
+                foreach (var item in Default.PathFilesToDelete)
+                {
+                    PathFilesDelBox.Items.Add(item);
                 }
             }
-
-            Default.Save();
         }
 
         private void PathFilesDelOldRemove_Click(object sender, EventArgs e)
         {
-            PathFilesDelOldBox.Items.Remove(PathFilesDelOldBox.SelectedItem);
-            foreach (string item in Default.PathFilesToDeleteOlder)
+            if (PathFilesDelOldBox.SelectedItem != null)
             {
-                if (item == PathFilesDelOldBox.SelectedItem.ToString())
+                foreach (var item in Default.PathFilesToDeleteOlder)
                 {
-                    Default.PathFilesToDeleteOlder.Remove(item);
+                    if (item == PathFilesDelOldBox.SelectedItem.ToString())
+                    {
+                        Default.PathFilesToDeleteOlder.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
 
-                    break;
+                PathFilesDelOldBox.Items.Clear();
+                PathFilesDelOldBox.Text = "";
+
+                foreach (var item in Default.PathFilesToDeleteOlder)
+                {
+                    PathFilesDelOldBox.Items.Add(item);
                 }
             }
-
-            Default.Save();
         }
 
         private void ServicesDisableRemove_Click(object sender, EventArgs e)
         {
-            ServicsDisableBox.Items.Remove(ServicsDisableBox.SelectedItem);
-            foreach (string item in Default.ServicesToDisable)
+            if (ServicsDisableBox.SelectedItem != null)
             {
-                if (item == ServicsDisableBox.SelectedItem.ToString())
+                foreach (var item in Default.ServicesToDisable)
                 {
-                    Default.ServicesToDisable.Remove(item);
+                    if (item == ServicsDisableBox.SelectedItem.ToString())
+                    {
+                        Default.ServicesToDisable.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
 
-                    break;
+                ServicsDisableBox.Items.Clear();
+                ServicsDisableBox.Text = "";
+
+                foreach (var item in Default.ServicesToDisable)
+                {
+                    ServicsDisableBox.Items.Add(item);
                 }
             }
         }
 
         private void ServicesManualRemove_Click(object sender, EventArgs e)
         {
-            ServicesManualBox.Items.Remove(ServicesManualBox.SelectedItem);
-            foreach (string item in Default.ServicesToManual)
+            if (ServicesManualBox.SelectedItem != null)
             {
-                if (item == ServicesManualBox.SelectedItem.ToString())
+                foreach (var item in Default.ServicesToManual)
                 {
-                    Default.ServicesToManual.Remove(item);
+                    if (item == ServicesManualBox.SelectedItem.ToString())
+                    {
+                        Default.ServicesToManual.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
 
-                    break;
+                ServicesManualBox.Items.Clear();
+                ServicesManualBox.Text = "";
+
+                foreach (var item in Default.ServicesToManual)
+                {
+                    ServicesManualBox.Items.Add(item);
                 }
             }
-
-            Default.Save();
         }
 
         private void TasksDisableRemove_Click(object sender, EventArgs e)
         {
-            TasksDisableBox.Items.Remove(TasksDisableBox.SelectedItem);
-            foreach (string item in Default.TasksToDisable)
+            if (TasksDisableBox.SelectedItem != null)
             {
-                if (item == TasksDisableBox.SelectedItem.ToString())
+                foreach (var item in Default.TasksToDisable)
                 {
-                    Default.TasksToDisable.Remove(item);
+                    if (item == TasksDisableBox.SelectedItem.ToString())
+                    {
+                        Default.TasksToDisable.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
 
-                    break;
+                TasksDisableBox.Items.Clear();
+                TasksDisableBox.Text = "";
+
+                foreach (var item in Default.TasksToDisable)
+                {
+                    TasksDisableBox.Items.Add(item);
                 }
             }
-
-            Default.Save();
         }
 
         #endregion Remove Buttons
@@ -411,5 +558,37 @@ namespace Maintenance
         }
 
         #endregion File and Folder Browser Dialogs
+
+        #region File and Folder Add Text (Key:Enter)
+
+        private void AddTexValuest(ComboBox comboBox, StringCollection collection)
+        {
+            string SelectedPath = comboBox.Text;
+
+            bool ItemExists = false;
+
+            if (SelectedPath != null)
+            {
+                foreach (string item in comboBox.Items)
+                {
+                    if (item == SelectedPath)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    comboBox.Items.Add(SelectedPath);
+                    collection.Add(SelectedPath);
+                }
+
+                comboBox.Text = "";
+            }
+
+            Default.Save();
+        }
+
+        #endregion File and Folder Add Text (Key:Enter)
     }
 }

@@ -80,7 +80,7 @@
             // LoggingBox
             // 
             this.LoggingBox.AutoSize = true;
-            this.LoggingBox.Location = new System.Drawing.Point(478, 468);
+            this.LoggingBox.Location = new System.Drawing.Point(478, 470);
             this.LoggingBox.Name = "LoggingBox";
             this.LoggingBox.Size = new System.Drawing.Size(106, 17);
             this.LoggingBox.TabIndex = 9;
@@ -91,7 +91,7 @@
             // DiskCheckBox
             // 
             this.DiskCheckBox.AutoSize = true;
-            this.DiskCheckBox.Location = new System.Drawing.Point(315, 468);
+            this.DiskCheckBox.Location = new System.Drawing.Point(315, 470);
             this.DiskCheckBox.Name = "DiskCheckBox";
             this.DiskCheckBox.Size = new System.Drawing.Size(144, 17);
             this.DiskCheckBox.TabIndex = 10;
@@ -101,7 +101,7 @@
             // 
             // HelpButton
             // 
-            this.HelpButton.Location = new System.Drawing.Point(15, 462);
+            this.HelpButton.Location = new System.Drawing.Point(12, 468);
             this.HelpButton.Name = "HelpButton";
             this.HelpButton.Size = new System.Drawing.Size(48, 23);
             this.HelpButton.TabIndex = 19;
@@ -111,7 +111,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.groupBox1.BackColor = System.Drawing.Color.Silver;
             this.groupBox1.Controls.Add(this.FilesHideBrowse);
             this.groupBox1.Controls.Add(this.FilesDelBrowse);
             this.groupBox1.Controls.Add(this.FilesHideRemove);
@@ -120,7 +120,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.FilesHideBox);
             this.groupBox1.Controls.Add(this.FilesToDelBox);
-            this.groupBox1.Location = new System.Drawing.Point(0, 2);
+            this.groupBox1.Location = new System.Drawing.Point(0, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(596, 94);
             this.groupBox1.TabIndex = 46;
@@ -203,7 +203,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.groupBox2.BackColor = System.Drawing.Color.Silver;
             this.groupBox2.Controls.Add(this.DirDelBrowse);
             this.groupBox2.Controls.Add(this.DirDelRemove);
             this.groupBox2.Controls.Add(this.label1);
@@ -216,7 +216,7 @@
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.PathFilesDelOldBox);
             this.groupBox2.Controls.Add(this.PathFilesDelBox);
-            this.groupBox2.Location = new System.Drawing.Point(0, 97);
+            this.groupBox2.Location = new System.Drawing.Point(0, 99);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(596, 131);
             this.groupBox2.TabIndex = 47;
@@ -336,7 +336,7 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.groupBox3.BackColor = System.Drawing.Color.Silver;
             this.groupBox3.Controls.Add(this.ServicesTextBox);
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.ServicesManualButton);
@@ -347,7 +347,7 @@
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.ServicesManualBox);
             this.groupBox3.Controls.Add(this.ServicsDisableBox);
-            this.groupBox3.Location = new System.Drawing.Point(0, 229);
+            this.groupBox3.Location = new System.Drawing.Point(0, 231);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(596, 127);
             this.groupBox3.TabIndex = 48;
@@ -446,14 +446,14 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.groupBox4.BackColor = System.Drawing.Color.Silver;
             this.groupBox4.Controls.Add(this.TasksTextBox);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.TasksDisableButton);
             this.groupBox4.Controls.Add(this.TasksDisableRemove);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.TasksDisableBox);
-            this.groupBox4.Location = new System.Drawing.Point(0, 358);
+            this.groupBox4.Location = new System.Drawing.Point(0, 360);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(596, 104);
             this.groupBox4.TabIndex = 49;
@@ -517,6 +517,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.ClientSize = new System.Drawing.Size(596, 495);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);

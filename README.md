@@ -8,7 +8,7 @@ Donations go a long way https://www.patreon.com/xCONFLiCTiONx
 <a name="help"></a>
 **HELP SECTION**
   
-Schedule Tasks:  
+**Schedule Tasks:**  
   
 You can set scheduled tasks to run whenever you like. The following is recommended:  
 
@@ -17,7 +17,7 @@ You can set scheduled tasks to run whenever you like. The following is recommend
 - Run Nightly: Arguments: "/FullCheckup /PuranFD C: -s1" (no quotes - REQUIRES Puran Defrag)  - Set Name to Maintenance - Nightly **This is Heavy maintenance**
   
   
-GUI:  
+**GUI:**  
 
 - Directories To Delete: Delete a directory and all the contents
 
@@ -34,3 +34,8 @@ GUI:
 - Services To Manual: Sets the services to Manual (allows them to still be ran but only as required by the system/program)
 
 - Tasks To Disable: Disables scheduled tasks
+  
+  
+**TIPS:**  
+  
+- You can add text to the combo box and press enter and it will be added
