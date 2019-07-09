@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
+﻿using Logger;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
@@ -12,14 +10,9 @@ namespace Maintenance
         public static void SetTasks()
         {
             // Disable Tasks
-            if (ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection != null)
+            foreach (string task in Default.TasksToDisable)
             {
-                foreach (var tasks in ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection)
-                {
-                    string tasksToDisable = (ConfigurationManager.GetSection("TasksToDisable") as NameValueCollection).GetValues(tasks.ToString()).FirstOrDefault();
-                    if (tasksToDisable != "")
-                        Taskexistance(tasksToDisable);
-                }
+                Taskexistance(task);
             }
         }
 
@@ -43,7 +36,8 @@ namespace Maintenance
                     {
                         if (stdout.Contains("Ready"))
                         {
-                            Trace.WriteLine(DateTime.Now + "   |     Disabling task: " + taskname);
+                            Logging.Info("Disabling task: " + taskname, "DisableTasks");
+
                             ProcessStartInfo info = new ProcessStartInfo();
                             info.FileName = "schtasks.exe";
                             info.UseShellExecute = false;

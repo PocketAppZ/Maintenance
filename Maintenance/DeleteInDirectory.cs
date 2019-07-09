@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Diagnostics;
+﻿using Logger;
+using System;
 using System.IO;
-using System.Linq;
-using System.Windows.Forms;
+using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
@@ -13,110 +10,66 @@ namespace Maintenance
         public static void DeleteSetFiles()
         {
             // Delete Files and Folders in a Directory
-            if (ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection != null)
+            int deleteTemp = 0;
+            foreach (string paths in Default.PathFilesToDelete)
             {
-                int deleteTemp = 0;
-            Retry:;
-                foreach (var paths in ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection)
+                try
                 {
-                    try
+                    var filesPath = Environment.ExpandEnvironmentVariables(paths);
+                    if (filesPath != "")
                     {
-                        string Variable = (ConfigurationManager.GetSection("PathFilesToDelete") as NameValueCollection).GetValues(paths.ToString()).FirstOrDefault();
-                        var filesPath = Environment.ExpandEnvironmentVariables(Variable);
-                        if (filesPath != "")
+                        try
                         {
-                            try
-                            {
-                                foreach (string file in Directory.GetFiles(filesPath))
-                                {
-                                    try
-                                    {
-                                        if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
-                                        {
-                                            Trace.WriteLine(DateTime.Now + "   |     Deleting file: " + file);
-                                            File.Delete(file);
-                                        }
-                                        else
-                                        {
-                                            deleteTemp++;
-                                            if (deleteTemp == 1)
-                                            {
-                                                Trace.WriteLine(DateTime.Now + "   |     Deleting temp files");
-
-                                                DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
-
-                                                DeleteTemp(directory);
-                                            }
-                                        }
-                                    }
-                                    catch (FileNotFoundException)
-                                    {
-                                        continue;
-                                    }
-                                    catch (IOException)
-                                    {
-                                        continue;
-                                    }
-                                    catch (Exception)
-                                    {
-                                        foreach (var catcher in ConfigurationManager.GetSection("PathFilesToDeleteCatch") as NameValueCollection)
-                                        {
-                                            try
-                                            {
-                                                string catcherVariable = (ConfigurationManager.GetSection("PathFilesToDeleteCatch") as NameValueCollection).GetValues(catcher.ToString()).FirstOrDefault();
-
-                                                var catcherPath = Environment.ExpandEnvironmentVariables(catcherVariable);
-                                                if (catcherPath == filesPath)
-                                                {
-                                                    DialogResult result = MessageBox.Show(filesPath + " cannot be deleted at this time. Please check that a process is not holding it and then try again.", "Maintenance", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation);
-                                                    if (result == DialogResult.Abort)
-                                                    {
-                                                        Environment.Exit(0);
-                                                    }
-                                                    else if (result == DialogResult.Retry)
-                                                    {
-                                                        goto Retry;
-                                                    }
-                                                    else if (result == DialogResult.Ignore)
-                                                    {
-                                                        continue;
-                                                    }
-                                                }
-                                            }
-                                            catch (Exception)
-                                            {
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                continue;
-                            }
-                            foreach (string directory in Directory.GetDirectories(filesPath))
+                            foreach (string file in Directory.GetFiles(filesPath))
                             {
                                 try
                                 {
-                                    Trace.WriteLine(DateTime.Now + "   |     Deleting directory: " + directory);
-                                    Directory.Delete(directory, true);
+                                    if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
+                                    {
+                                        Logging.Info("Deleting file: " + file, "DeleteInDirectory");
+                                        File.Delete(file);
+                                    }
+                                    else
+                                    {
+                                        deleteTemp++;
+                                        if (deleteTemp == 1)
+                                        {
+                                            Logging.Info("Deleting temp files", "DeleteInDirectory");
+
+                                            DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
+
+                                            DeleteTemp(directory);
+                                        }
+                                    }
                                 }
-                                catch (DirectoryNotFoundException)
-                                {
-                                    continue;
-                                }
-                                catch (IOException)
+                                catch (Exception)
                                 {
                                     continue;
                                 }
                             }
                         }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
+                        foreach (string directory in Directory.GetDirectories(filesPath))
+                        {
+                            try
+                            {
+                                Logging.Info("Deleting directory: " + directory, "DeleteInDirectory");
+
+                                Directory.Delete(directory, true);
+                            }
+                            catch (Exception)
+                            {
+                                continue;
+                            }
+                        }
                     }
-                    catch (DirectoryNotFoundException)
-                    {
-                        continue;
-                    }
+                }
+                catch (Exception)
+                {
+                    continue;
                 }
             }
         }
@@ -132,8 +85,10 @@ namespace Maintenance
                         file.Delete();
                     }
                 }
-                catch (IOException) { }
-                catch (UnauthorizedAccessException) { }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
             foreach (DirectoryInfo subDirectory in directory.GetDirectories())
             {
@@ -141,8 +96,10 @@ namespace Maintenance
                 {
                     subDirectory.Delete(true);
                 }
-                catch (IOException) { }
-                catch (UnauthorizedAccessException) { }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
         }
     }

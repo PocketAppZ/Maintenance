@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
+﻿using Logger;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.ServiceProcess;
+using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
@@ -12,30 +12,48 @@ namespace Maintenance
     {
         public static void SetServices()
         {
-            // Disable Services
-            if (ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection != null)
+            // Services To Manual
+            foreach (string service in Default.ServicesToManual)
             {
-                foreach (var services in ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection)
+                try
                 {
-                    string servicesToManual = (ConfigurationManager.GetSection("ServicesToManual") as NameValueCollection).GetValues(services.ToString()).FirstOrDefault();
-                    if (servicesToManual != "")
+                    if (ServiceStatus(service) != "Manual")
                     {
-                        if (ServiceExists(servicesToManual) && ServiceStatus(servicesToManual) != "Manual")
-                        {
-                            DisableService(servicesToManual);
-                            StopServices(servicesToManual);
-                        }
+                        SetService(service, "Manual");
+                        StopServices(service);
                     }
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            // Services To Disable
+            foreach (string service in Default.ServicesToDisable)
+            {
+                try
+                {
+                    if (ServiceStatus(service) != "Disabled")
+                    {
+                        SetService(service, "Disabled");
+                        StopServices(service);
+                    }
+                }
+                catch (Exception)
+                {
+                    continue;
                 }
             }
         }
 
-        public static void DisableService(string serviceName)
+        public static void SetService(string serviceName, string status)
         {
             using (var mo = new ManagementObject(string.Format("Win32_Service.Name=\"{0}\"", serviceName)))
             {
-                Trace.WriteLine(DateTime.Now + "   |     Setting service: " + serviceName + " to manual.");
-                mo.InvokeMethod("ChangeStartMode", new object[] { "Manual" });
+                Logging.Info("Setting service: " + serviceName + " to manual.", "DisableServices");
+
+                mo.InvokeMethod("ChangeStartMode", new object[] { status });
             }
         }
 
@@ -52,25 +70,30 @@ namespace Maintenance
             }
         }
 
-        // Set Services to manual that you don't want running
-        private static string status;
+        static string ServiceStatus(string serviceName)
+        {
+            string status = string.Empty;
+
+            if (ServiceExists(serviceName))
+            {
+                string wmiQuery = "SELECT * FROM Win32_Service WHERE Name='" + serviceName + "\'";
+                var searcher = new ManagementObjectSearcher(wmiQuery);
+                var results = searcher.Get();
+
+                foreach (ManagementObject service in results)
+                {
+                    status = (service["StartMode"]).ToString();
+                }
+            }
+
+            return status;
+        }
+
         private static bool ServiceExists(string serviceName)
         {
             ServiceController[] services = ServiceController.GetServices();
             var service = services.FirstOrDefault(s => s.ServiceName == serviceName);
             return service != null;
-        }
-        static string ServiceStatus(string serviceName)
-        {
-            string wmiQuery = "SELECT * FROM Win32_Service WHERE Name='" + serviceName + "\'";
-            var searcher = new ManagementObjectSearcher(wmiQuery);
-            var results = searcher.Get();
-
-            foreach (ManagementObject service in results)
-            {
-                status = (service["StartMode"]).ToString();
-            }
-            return status;
         }
     }
 }

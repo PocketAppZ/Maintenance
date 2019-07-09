@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Maintenance
@@ -15,6 +9,11 @@ namespace Maintenance
         public SettingsForm()
         {
             InitializeComponent();
+        }
+
+        private void HelpButton_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/xCONFLiCTiONx/Maintenance#help");
         }
     }
 }

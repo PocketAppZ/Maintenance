@@ -1,21 +1,23 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Diagnostics;
 using System.IO;
+using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
     public class DiskCheck
     {
-        static DateTime today = DateTime.Today;
-        static string[] drives = Directory.GetLogicalDrives();
+        static readonly DateTime today = DateTime.Today;
+        static readonly string[] drives = Directory.GetLogicalDrives();
 
         public static void ScheduleCheck()
         {
             // Run Disk Check once a month on next reboot from Monday's first boot up
             string checkFile = "C:\\checkFile";
-            if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && !File.Exists(checkFile))
+            if (today.DayOfWeek == DayOfWeek.Monday && today.Day <= 7 && !File.Exists(checkFile) && Default.RunDiskCheckMonthly)
             {
-                Trace.WriteLine(DateTime.Now + "   |     Scheduling a disk check to run at next reboot.");
+                Logging.Info("Scheduling a disk check to run at next reboot.", "DiskCheck");
 
                 using (Process process = new Process())
                 {
@@ -34,7 +36,8 @@ namespace Maintenance
                 FileAttributes attributes = File.GetAttributes(checkFile);
                 if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
                 {
-                    Trace.WriteLine(DateTime.Now + "   |     Hiding file: " + checkFile);
+                    Logging.Info("Hiding file: " + checkFile, "DiskCheck");
+
                     File.SetAttributes(checkFile, File.GetAttributes(checkFile) | FileAttributes.Hidden);
                     File.SetAttributes(checkFile, File.GetAttributes(checkFile) | FileAttributes.System);
                 }

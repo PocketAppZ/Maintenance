@@ -1,141 +1,82 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Diagnostics;
+﻿using Logger;
+using System;
 using System.IO;
-using System.Linq;
+using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
     public class DeleteInDirectoryOlder
     {
+        // Delete Files and Folders in a Directory older than x days
         public static void DeleteSetFiles()
         {
-            // Delete Files and Folders in a Directory older than x days
-            if (ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection != null)
+            // Files to delete
+            foreach (string path in Default.PathFilesToDeleteOlder)
             {
-                foreach (var paths in ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection)
+                try
                 {
-                    try
-                    {
-                        string Variable = (ConfigurationManager.GetSection("PathFilesToDeleteOlder") as NameValueCollection).GetValues(paths.ToString()).FirstOrDefault();
-                        var filesPath = Environment.ExpandEnvironmentVariables(Variable);
-                        if (filesPath != "")
-                        {
-                            // Files to delete
-                            foreach (string f in Directory.GetFiles(filesPath, "*", SearchOption.AllDirectories))
-                            {
-                                if (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection != null)
-                                {
-                                    foreach (var days in ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection)
-                                    {
-                                        string DaysNumberValue = (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection).GetValues(days.ToString()).FirstOrDefault();
-                                        int DaysNumber = Convert.ToInt32(DaysNumberValue);
-                                        if (paths.ToString() == days.ToString())
-                                        {
-                                            try
-                                            {
-                                                FileInfo fi = new FileInfo(f);
-                                                if (fi.CreationTime < DateTime.Now.AddDays(-DaysNumber))
-                                                {
-                                                    Trace.WriteLine(DateTime.Now + "   |     Deleting file: " + f);
-                                                    File.Delete(f);
-                                                }
-                                            }
-                                            catch (UnauthorizedAccessException)
-                                            {
-                                                continue;
-                                            }
-                                            catch (FileNotFoundException)
-                                            {
-                                                continue;
-                                            }
-                                            catch (IOException)
-                                            {
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            foreach (string file in Directory.GetFiles(filesPath))
-                            {
-                                if (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection != null)
-                                {
-                                    foreach (var days in ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection)
-                                    {
-                                        string DaysNumberValue = (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection).GetValues(days.ToString()).FirstOrDefault();
-                                        int DaysNumber = Convert.ToInt32(DaysNumberValue);
-                                        if (paths.ToString() == days.ToString())
-                                        {
-                                            try
-                                            {
-                                                FileInfo fi = new FileInfo(file);
-                                                if (fi.CreationTime < DateTime.Now.AddDays(-DaysNumber))
-                                                {
-                                                    Trace.WriteLine(DateTime.Now + "   |     Deleting file: " + file);
-                                                    File.Delete(file);
-                                                }
-                                            }
-                                            catch (UnauthorizedAccessException)
-                                            {
-                                                continue;
-                                            }
-                                            catch (FileNotFoundException)
-                                            {
-                                                continue;
-                                            }
-                                            catch (IOException)
-                                            {
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            // Directories to delete
-                            foreach (string d in Directory.GetDirectories(filesPath))
-                            {
-                                if (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection != null)
-                                {
-                                    foreach (var days in ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection)
-                                    {
-                                        string DaysNumberValue = (ConfigurationManager.GetSection("PathFilesToDeleteDays") as NameValueCollection).GetValues(days.ToString()).FirstOrDefault();
-                                        int DaysNumber = Convert.ToInt32(DaysNumberValue);
+                    int days = Convert.ToInt32(path.Split(',')[0]);
+                    var filesPath = Environment.ExpandEnvironmentVariables(path.Split(',')[1]);
 
-                                        if (paths.ToString() == days.ToString())
-                                        {
-                                            try
-                                            {
-                                                DirectoryInfo fi = new DirectoryInfo(d);
-                                                if (fi.CreationTime < DateTime.Now.AddDays(-DaysNumber))
-                                                {
-                                                    Trace.WriteLine(DateTime.Now + "   |     Deleting file: " + d);
-                                                    Directory.Delete(d, true);
-                                                }
-                                            }
-                                            catch (UnauthorizedAccessException)
-                                            {
-                                                continue;
-                                            }
-                                            catch (FileNotFoundException)
-                                            {
-                                                continue;
-                                            }
-                                            catch (IOException)
-                                            {
-                                                continue;
-                                            }
-                                        }
-                                    }
+                    if (filesPath != "")
+                    {
+                        foreach (string f in Directory.GetFiles(filesPath, "*", SearchOption.AllDirectories))
+                        {
+                            try
+                            {
+                                FileInfo fi = new FileInfo(f);
+                                if (fi.CreationTime < DateTime.Now.AddDays(-days))
+                                {
+                                    Logging.Info("Deleting file: " + f, "DeleteInDirectoryOlder");
+
+                                    File.Delete(f);
                                 }
+                            }
+                            catch (Exception)
+                            {
+                                continue;
                             }
                         }
                     }
-                    catch (DirectoryNotFoundException)
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            // Directories to delete
+            foreach (string path in Default.PathFilesToDeleteOlder)
+            {
+                try
+                {
+                    int days = Convert.ToInt32(path.Split(',')[0]);
+                    var filesPath = Environment.ExpandEnvironmentVariables(path.Split(',')[1]);
+
+                    if (filesPath != "")
                     {
-                        continue;
+                        foreach (string d in Directory.GetDirectories(filesPath))
+                        {
+                            try
+                            {
+                                DirectoryInfo fi = new DirectoryInfo(d);
+                                if (fi.CreationTime < DateTime.Now.AddDays(-days))
+                                {
+                                    Logging.Info("Deleting file: " + d, "DeleteInDirectoryOlder");
+
+                                    Directory.Delete(d, true);
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                continue;
+                            }
+                        }
                     }
+                }
+                catch (Exception)
+                {
+                    continue;
                 }
             }
         }

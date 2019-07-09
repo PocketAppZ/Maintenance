@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Diagnostics;
+﻿using Logger;
+using System;
 using System.IO;
-using System.Linq;
+using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
@@ -12,39 +10,36 @@ namespace Maintenance
         public static void SetAsHidden()
         {
             // Hide Files
-            if (ConfigurationManager.GetSection("FilesToHide") as NameValueCollection != null)
+            foreach (var hideFile in Default.FilesToHide)
             {
-                foreach (var hide in ConfigurationManager.GetSection("FilesToHide") as NameValueCollection)
+                var filePath = Environment.ExpandEnvironmentVariables(hideFile);
+                if (filePath != "")
                 {
-                    string filesToHide = (ConfigurationManager.GetSection("FilesToHide") as NameValueCollection).GetValues(hide.ToString()).FirstOrDefault();
-                    var Variable = filesToHide;
-                    var filePath = Environment.ExpandEnvironmentVariables(Variable);
-                    if (filePath != "")
+                    if (File.Exists(filePath))
                     {
-                        if (File.Exists(filePath))
+                        if ((File.GetAttributes(filePath) & FileAttributes.Hidden) != FileAttributes.Hidden)
                         {
-                            if ((File.GetAttributes(filePath) & FileAttributes.Hidden) != FileAttributes.Hidden)
+                            FileAttributes attributes = File.GetAttributes(filePath);
+                            if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
                             {
-                                FileAttributes attributes = File.GetAttributes(filePath);
-                                if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
-                                {
-                                    Trace.WriteLine(DateTime.Now + "   |     Hiding file: " + filePath);
-                                    File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.Hidden);
-                                    File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.System);
-                                }
+                                Logging.Info("Hiding file: " + filePath, "HideFiles");
+
+                                File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.Hidden);
+                                File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.System);
                             }
                         }
-                        else if (Directory.Exists(filePath))
+                    }
+                    else if (Directory.Exists(filePath))
+                    {
+                        if ((File.GetAttributes(filePath) & FileAttributes.Hidden) != FileAttributes.Hidden)
                         {
-                            if ((File.GetAttributes(filePath) & FileAttributes.Hidden) != FileAttributes.Hidden)
+                            Logging.Info("Hiding directory: " + filePath, "HideFiles");
+
+                            FileAttributes attributes = File.GetAttributes(filePath);
+                            if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
                             {
-                                Trace.WriteLine(DateTime.Now + "   |     Hiding directory: " + filePath);
-                                FileAttributes attributes = File.GetAttributes(filePath);
-                                if (attributes != FileAttributes.Hidden || attributes != FileAttributes.System)
-                                {
-                                    File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.Hidden);
-                                    File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.System);
-                                }
+                                File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.Hidden);
+                                File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.System);
                             }
                         }
                     }
