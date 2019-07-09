@@ -43,6 +43,12 @@ namespace Maintenance
                     {
                         StartLightCleanup();
                     }
+                    else if (A0 == "/help" || A0 == "/?" || A0 == "-help" || A0 == "-?")
+                    {
+                        Console.WriteLine("/FULLCHECKUP as a scheduled task when you are not using the computer for a long while.");
+
+                        Logging.Info("/FULLCHECKUP as a scheduled task when you are not using the computer for a long while." + Environment.NewLine, "Program");
+                    }
                     else
                     {
                         StartLightCleanup();
@@ -79,12 +85,6 @@ namespace Maintenance
                             Logging.Info("*********************  Full Checkup *********************" + Environment.NewLine, "Program");
 
                             FullCheckup.StartCheckup(PuranDefragArgs);
-                        }
-                        if (A0 == "/help" || A0 == "/?" || A0 == "-help" || A0 == "-?")
-                        {
-                            Console.WriteLine("/FULLCHECKUP as a scheduled task when you are not using the computer for a long while.");
-
-                            Logging.Info("/FULLCHECKUP as a scheduled task when you are not using the computer for a long while." + Environment.NewLine, "Program");
                         }
                     }
                 }

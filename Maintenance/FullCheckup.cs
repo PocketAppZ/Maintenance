@@ -37,51 +37,72 @@ namespace Maintenance
 
         private static void RunCommand(string filename, string args)
         {
-            using (Process process = new Process())
+            try
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo
+                using (Process process = new Process())
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    StandardOutputEncoding = Encoding.GetEncoding(437),
-                    FileName = filename,
-                    Arguments = args
-                };
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        StandardOutputEncoding = Encoding.GetEncoding(437),
+                        FileName = filename,
+                        Arguments = args
+                    };
 
-                process.StartInfo = startInfo;
+                    process.StartInfo = startInfo;
 
-                process.ErrorDataReceived += Proc_ErrorReceived;
-                process.OutputDataReceived += Proc_DataReceived;
+                    process.ErrorDataReceived += Proc_ErrorReceived;
+                    process.OutputDataReceived += Proc_DataReceived;
 
-                process.Start();
+                    process.Start();
 
-                process.BeginErrorReadLine();
-                process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.BeginOutputReadLine();
 
-                process.WaitForExit();
+                    process.WaitForExit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex, "FullCheckup");
             }
         }
 
         private static void Proc_DataReceived(object sender, DataReceivedEventArgs e)
         {
-            var Output = Regex.Replace(e.Data, "\x00", "");
-
-            if (!Output.Contains("[=") && !Output.Contains("%"))
+            try
             {
-                Logging.Info(Output, "Full Checkup - Data Recieved");
+                var Output = Regex.Replace(e.Data, "\x00", "");
+
+                if (!Output.Contains("[=") && !Output.Contains("%"))
+                {
+                    Logging.Info(Output, "Full Checkup - Data Recieved");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex, "FullCheckup");
             }
         }
 
         private static void Proc_ErrorReceived(object sender, DataReceivedEventArgs e)
         {
-            var Output = Regex.Replace(e.Data, "\x00", "");
-
-            if (!Output.Contains("[=") && !Output.Contains("%"))
+            try
             {
-                Logging.Info(Output, "Full Checkup - Error Recieved");
+                var Output = Regex.Replace(e.Data, "\x00", "");
+
+                if (!Output.Contains("[=") && !Output.Contains("%"))
+                {
+                    Logging.Info(Output, "Full Checkup - Error Recieved");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex, "FullCheckup");
             }
         }
     }
