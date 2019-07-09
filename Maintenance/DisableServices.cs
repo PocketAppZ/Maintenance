@@ -51,7 +51,7 @@ namespace Maintenance
         {
             using (var mo = new ManagementObject(string.Format("Win32_Service.Name=\"{0}\"", serviceName)))
             {
-                Logging.Info("Setting service: " + serviceName + " to manual.", "DisableServices");
+                Logging.Info("Setting service: " + serviceName + " to: " + status, "DisableServices");
 
                 mo.InvokeMethod("ChangeStartMode", new object[] { status });
             }

@@ -76,7 +76,7 @@ namespace Maintenance
 
                         if (A0 == "/fullcheckup" || A0 == "-fullcheckup")
                         {
-                            Logging.Info("*********************  Full Checkup *********************" + Environment.NewLine, "FullCheckup");
+                            Logging.Info("*********************  Full Checkup *********************" + Environment.NewLine, "Program");
 
                             FullCheckup.StartCheckup(PuranDefragArgs);
                         }
@@ -84,7 +84,7 @@ namespace Maintenance
                         {
                             Console.WriteLine("/FULLCHECKUP as a scheduled task when you are not using the computer for a long while.");
 
-                            Logging.Info("/FULLCHECKUP as a scheduled task when you are not using the computer for a long while." + Environment.NewLine, "/HELP");
+                            Logging.Info("/FULLCHECKUP as a scheduled task when you are not using the computer for a long while." + Environment.NewLine, "Program");
                         }
                     }
                 }
@@ -101,6 +101,8 @@ namespace Maintenance
                 settings.ShowDialog();
             }
 
+            Logging.Info("*********************  END OF FILE  *********************", "Program");
+
             Environment.Exit(0);
         }
 
@@ -113,43 +115,43 @@ namespace Maintenance
 
             if (Default.RunDiskCheckMonthly)
             {
-                Logging.Info("*********************  Schedule Disck Check  *********************" + Environment.NewLine, "FullCheckup");
+                Logging.Info("*********************  Schedule Disck Check  *********************" + Environment.NewLine, "Program");
                 DiskCheck.ScheduleCheck();
             }
 
             if (Default.TasksToDisable.Count > 0)
             {
-                Logging.Info("*********************  Disable Scheduled Tasks  *********************" + Environment.NewLine, "FullCheckup");
+                Logging.Info("*********************  Disable Scheduled Tasks  *********************" + Environment.NewLine, "Program");
                 DisableTasks.SetTasks();
             }
 
             if (Default.ServicesToManual.Count > 0 || Default.ServicesToDisable.Count > 0)
             {
-                Logging.Info("*********************  Unused Services To Manual  *********************" + Environment.NewLine, "FullCheckup");
+                Logging.Info("*********************  Unused Services To Manual  *********************" + Environment.NewLine, "Program");
                 DisableServices.SetServices();
             }
 
             if (Default.FilesToHide.Count > 0)
             {
-                Logging.Info("*********************  Set Files to Hidden  *********************" + Environment.NewLine, "FullCheckup");
+                Logging.Info("*********************  Set Files to Hidden  *********************" + Environment.NewLine, "Program");
                 HideFiles.SetAsHidden();
             }
 
             if (Default.PathFilesToDelete.Count > 0)
             {
-                Logging.Info("*********************  Delete Files In Directory  *********************" + Environment.NewLine, "FullCheckup");
+                Logging.Info("*********************  Delete Files In Directory  *********************" + Environment.NewLine, "Program");
                 DeleteInDirectory.DeleteSetFiles();
             }
 
             if (Default.PathFilesToDeleteOlder.Count > 0)
             {
-                Logging.Info("*********************  DeleteInDirectoryOlder.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
+                Logging.Info("*********************  DeleteInDirectoryOlder.DeleteSetFiles  *********************" + Environment.NewLine, "Program");
                 DeleteInDirectoryOlder.DeleteSetFiles();
             }
 
             if (Default.FilesToDelete.Count > 0)
             {
-                Logging.Info("*********************  DeleteFiles.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
+                Logging.Info("*********************  DeleteFiles.DeleteSetFiles  *********************" + Environment.NewLine, "Program");
                 DeleteFiles.DeleteSetFiles();
             }
         }
