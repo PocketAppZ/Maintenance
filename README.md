@@ -6,6 +6,16 @@ Donations go a long way https://www.patreon.com/xCONFLiCTiONx
 <a name="help"></a>
 **HELP SECTION**
 
+Schedule Tasks:  
+You can set scheduled tasks to run whenever you like. The following is recommended:
+
+- Run at logon: No arguments - Set Name to Maintenance - Logon
+
+- Run Nightly: Arguments: "/FULLCHECKUP /PuranFD C: -s1" (no quotes - REQUIRES Puran Defrag)  - Set Name to Maintenance - Nightly
+  
+  
+GUI:  
+
 - Directories To Delete: Delete a directory and all the contents
 
 - Files To Delete: Delete specific files
