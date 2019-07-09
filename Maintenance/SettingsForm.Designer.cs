@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.HelpButton = new System.Windows.Forms.Button();
@@ -108,7 +109,8 @@
             // HelpButton
             // 
             this.HelpButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.HelpButton.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.HelpButton.Location = new System.Drawing.Point(12, 6);
             this.HelpButton.Name = "HelpButton";
             this.HelpButton.Size = new System.Drawing.Size(48, 23);
@@ -171,7 +173,8 @@
             // TasksDisableButton
             // 
             this.TasksDisableButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.TasksDisableButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.TasksDisableButton.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.TasksDisableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TasksDisableButton.Location = new System.Drawing.Point(412, 61);
             this.TasksDisableButton.Name = "TasksDisableButton";
             this.TasksDisableButton.Size = new System.Drawing.Size(82, 23);
@@ -183,7 +186,8 @@
             // TasksDisableRemove
             // 
             this.TasksDisableRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.TasksDisableRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.TasksDisableRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.TasksDisableRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TasksDisableRemove.Location = new System.Drawing.Point(412, 27);
             this.TasksDisableRemove.Name = "TasksDisableRemove";
             this.TasksDisableRemove.Size = new System.Drawing.Size(82, 23);
@@ -248,7 +252,8 @@
             // ServicesManualButton
             // 
             this.ServicesManualButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.ServicesManualButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ServicesManualButton.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.ServicesManualButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ServicesManualButton.Location = new System.Drawing.Point(500, 90);
             this.ServicesManualButton.Name = "ServicesManualButton";
             this.ServicesManualButton.Size = new System.Drawing.Size(82, 23);
@@ -260,7 +265,8 @@
             // ServicesDisableButton
             // 
             this.ServicesDisableButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.ServicesDisableButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ServicesDisableButton.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.ServicesDisableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ServicesDisableButton.Location = new System.Drawing.Point(412, 90);
             this.ServicesDisableButton.Name = "ServicesDisableButton";
             this.ServicesDisableButton.Size = new System.Drawing.Size(82, 23);
@@ -272,7 +278,8 @@
             // ServicesManualRemove
             // 
             this.ServicesManualRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.ServicesManualRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ServicesManualRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.ServicesManualRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ServicesManualRemove.Location = new System.Drawing.Point(412, 57);
             this.ServicesManualRemove.Name = "ServicesManualRemove";
             this.ServicesManualRemove.Size = new System.Drawing.Size(82, 23);
@@ -284,7 +291,8 @@
             // ServicesDisableRemove
             // 
             this.ServicesDisableRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.ServicesDisableRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ServicesDisableRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.ServicesDisableRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ServicesDisableRemove.Location = new System.Drawing.Point(412, 26);
             this.ServicesDisableRemove.Name = "ServicesDisableRemove";
             this.ServicesDisableRemove.Size = new System.Drawing.Size(82, 23);
@@ -352,7 +360,8 @@
             // DirDelBrowse
             // 
             this.DirDelBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.DirDelBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.DirDelBrowse.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.DirDelBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DirDelBrowse.Location = new System.Drawing.Point(500, 31);
             this.DirDelBrowse.Name = "DirDelBrowse";
             this.DirDelBrowse.Size = new System.Drawing.Size(82, 23);
@@ -364,7 +373,8 @@
             // DirDelRemove
             // 
             this.DirDelRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.DirDelRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.DirDelRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.DirDelRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DirDelRemove.Location = new System.Drawing.Point(412, 31);
             this.DirDelRemove.Name = "DirDelRemove";
             this.DirDelRemove.Size = new System.Drawing.Size(82, 23);
@@ -393,7 +403,8 @@
             // PathFilesDelOldBrowse
             // 
             this.PathFilesDelOldBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.PathFilesDelOldBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.PathFilesDelOldBrowse.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.PathFilesDelOldBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PathFilesDelOldBrowse.Location = new System.Drawing.Point(500, 92);
             this.PathFilesDelOldBrowse.Name = "PathFilesDelOldBrowse";
             this.PathFilesDelOldBrowse.Size = new System.Drawing.Size(82, 23);
@@ -405,7 +416,8 @@
             // PathFilesDelBrowse
             // 
             this.PathFilesDelBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.PathFilesDelBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.PathFilesDelBrowse.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.PathFilesDelBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PathFilesDelBrowse.Location = new System.Drawing.Point(500, 61);
             this.PathFilesDelBrowse.Name = "PathFilesDelBrowse";
             this.PathFilesDelBrowse.Size = new System.Drawing.Size(82, 23);
@@ -417,7 +429,8 @@
             // PathFilesDelOldRemove
             // 
             this.PathFilesDelOldRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.PathFilesDelOldRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.PathFilesDelOldRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.PathFilesDelOldRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PathFilesDelOldRemove.Location = new System.Drawing.Point(412, 92);
             this.PathFilesDelOldRemove.Name = "PathFilesDelOldRemove";
             this.PathFilesDelOldRemove.Size = new System.Drawing.Size(82, 23);
@@ -429,7 +442,8 @@
             // PathFilesDelRemove
             // 
             this.PathFilesDelRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.PathFilesDelRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.PathFilesDelRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.PathFilesDelRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PathFilesDelRemove.Location = new System.Drawing.Point(412, 61);
             this.PathFilesDelRemove.Name = "PathFilesDelRemove";
             this.PathFilesDelRemove.Size = new System.Drawing.Size(82, 23);
@@ -493,7 +507,8 @@
             // FilesHideBrowse
             // 
             this.FilesHideBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.FilesHideBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.FilesHideBrowse.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.FilesHideBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FilesHideBrowse.Location = new System.Drawing.Point(500, 57);
             this.FilesHideBrowse.Name = "FilesHideBrowse";
             this.FilesHideBrowse.Size = new System.Drawing.Size(82, 23);
@@ -505,7 +520,8 @@
             // FilesDelBrowse
             // 
             this.FilesDelBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.FilesDelBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.FilesDelBrowse.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.FilesDelBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FilesDelBrowse.Location = new System.Drawing.Point(500, 26);
             this.FilesDelBrowse.Name = "FilesDelBrowse";
             this.FilesDelBrowse.Size = new System.Drawing.Size(82, 23);
@@ -517,7 +533,8 @@
             // FilesHideRemove
             // 
             this.FilesHideRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.FilesHideRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.FilesHideRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.FilesHideRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FilesHideRemove.Location = new System.Drawing.Point(412, 57);
             this.FilesHideRemove.Name = "FilesHideRemove";
             this.FilesHideRemove.Size = new System.Drawing.Size(82, 23);
@@ -529,7 +546,8 @@
             // FilesDelRemove
             // 
             this.FilesDelRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.FilesDelRemove.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.FilesDelRemove.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.FilesDelRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FilesDelRemove.Location = new System.Drawing.Point(412, 26);
             this.FilesDelRemove.Name = "FilesDelRemove";
             this.FilesDelRemove.Size = new System.Drawing.Size(82, 23);
@@ -579,14 +597,14 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.ClientSize = new System.Drawing.Size(596, 495);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(612, 534);
             this.MinimumSize = new System.Drawing.Size(612, 534);
             this.Name = "SettingsForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SettingsForm";
+            this.Text = "Maintenance Settings";
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
