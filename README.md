@@ -12,9 +12,9 @@ Schedule Tasks:
   
 You can set scheduled tasks to run whenever you like. The following is recommended:  
 
-- Run at logon: No arguments - Set Name to Maintenance - Logon
+- Run at logon: Arguments: "/Logon" (no quotes)  - Set Name to Maintenance - Logon **This just does a quick cleanup**
 
-- Run Nightly: Arguments: "/FULLCHECKUP /PuranFD C: -s1" (no quotes - REQUIRES Puran Defrag)  - Set Name to Maintenance - Nightly
+- Run Nightly: Arguments: "/FullCheckup /PuranFD C: -s1" (no quotes - REQUIRES Puran Defrag)  - Set Name to Maintenance - Nightly **This is Heavy maintenance**
   
   
 GUI:  
