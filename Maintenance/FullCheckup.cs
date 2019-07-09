@@ -1,9 +1,9 @@
 ﻿using Logger;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
@@ -29,7 +29,7 @@ namespace Maintenance
 
             // Run Offline Defrag
             Logging.Info("*******************************  Offline Defrag  *******************************" + Environment.NewLine, "FullCheckup");
-            if (PuranDefragArgs != string.Empty)
+            if (PuranDefragArgs != string.Empty && File.Exists("PuranFD.exe"))
             {
                 RunCommand("PuranFD.exe", PuranDefragArgs);
             }

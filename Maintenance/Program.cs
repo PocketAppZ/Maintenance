@@ -1,6 +1,7 @@
 ﻿using Logger;
 using System;
 using System.Text;
+using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
@@ -9,35 +10,58 @@ namespace Maintenance
         public static string PuranDefragArgs = string.Empty;
 
         /// <summary>
-        /// The main entry point for the application.
+        /// Cleanup and Maintenance
         /// </summary>
         [STAThread]
         static void Main(string[] args)
         {
-            Logging.Log();
+            if (Default.LoggingEnabled)
+            {
+                Logging.Log();
+            }
 
-            Logging.Info("*******************************  Schedule Disck Check  *******************************" + Environment.NewLine, "FullCheckup");
-            DiskCheck.ScheduleCheck();
+            if (Default.RunDiskCheckMonthly)
+            {
+                Logging.Info("*********************  Schedule Disck Check  *********************" + Environment.NewLine, "FullCheckup");
+                DiskCheck.ScheduleCheck();
+            }
 
-            Logging.Info("*******************************  Disable Scheduled Tasks  *******************************" + Environment.NewLine, "FullCheckup");
-            DisableTasks.SetTasks();
+            if (Default.TasksToDisable.Count > 0)
+            {
+                Logging.Info("*********************  Disable Scheduled Tasks  *********************" + Environment.NewLine, "FullCheckup");
+                DisableTasks.SetTasks();
+            }
 
-            Logging.Info("*******************************  Unused Services To Manual  *******************************" + Environment.NewLine, "FullCheckup");
-            DisableServices.SetServices();
+            if (Default.ServicesToManual.Count > 0 || Default.ServicesToDisable.Count > 0)
+            {
+                Logging.Info("*********************  Unused Services To Manual  *********************" + Environment.NewLine, "FullCheckup");
+                DisableServices.SetServices();
+            }
 
-            Logging.Info("*******************************  Set Files to Hidden  *******************************" + Environment.NewLine, "FullCheckup");
-            HideFiles.SetAsHidden();
+            if (Default.FilesToHide.Count > 0)
+            {
+                Logging.Info("*********************  Set Files to Hidden  *********************" + Environment.NewLine, "FullCheckup");
+                HideFiles.SetAsHidden();
+            }
 
-            Logging.Info("*******************************  Delete Files In Directory  *******************************" + Environment.NewLine, "FullCheckup");
-            DeleteInDirectory.DeleteSetFiles();
+            if (Default.PathFilesToDelete.Count > 0)
+            {
+                Logging.Info("*********************  Delete Files In Directory  *********************" + Environment.NewLine, "FullCheckup");
+                DeleteInDirectory.DeleteSetFiles();
+            }
 
-            Logging.Info("*******************************  DeleteInDirectoryOlder.DeleteSetFiles  *******************************" + Environment.NewLine, "FullCheckup");
-            DeleteInDirectoryOlder.DeleteSetFiles();
+            if (Default.PathFilesToDeleteOlder.Count > 0)
+            {
+                Logging.Info("*********************  DeleteInDirectoryOlder.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
+                DeleteInDirectoryOlder.DeleteSetFiles();
+            }
 
-            Logging.Info("*******************************  DeleteFiles.DeleteSetFiles  *******************************" + Environment.NewLine, "FullCheckup");
-            DeleteFiles.DeleteSetFiles();
+            if (Default.FilesToDelete.Count > 0)
+            {
+                Logging.Info("*********************  DeleteFiles.DeleteSetFiles  *********************" + Environment.NewLine, "FullCheckup");
+                DeleteFiles.DeleteSetFiles();
+            }
 
-            Logging.Info("*******************************  Full Checkup *******************************" + Environment.NewLine, "FullCheckup");
             if (args.Length > 0)
             {
                 try
@@ -72,6 +96,8 @@ namespace Maintenance
 
                     if (A0 == "/fullcheckup" || A0 == "-fullcheckup")
                     {
+                        Logging.Info("*********************  Full Checkup *********************" + Environment.NewLine, "FullCheckup");
+
                         FullCheckup.StartCheckup(PuranDefragArgs);
                     }
                     if (A0 == "/help" || A0 == "/?" || A0 == "-help" || A0 == "-?")
