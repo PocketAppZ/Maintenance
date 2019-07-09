@@ -13,7 +13,7 @@ namespace Maintenance
 
         private void HelpButton_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/xCONFLiCTiONx/Maintenance#help");
+            Process.Start("https://github.com/xCONFLiCTiONx/Maintenance/#help");
         }
     }
 }
