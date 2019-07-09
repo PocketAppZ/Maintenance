@@ -144,7 +144,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(FilesToDelBox, Default.FilesToDelete);
+                AddTexValuest(TasksDisableBox, Default.TasksToDisable);
             }
         }
 
@@ -250,7 +250,7 @@ namespace Maintenance
                 Default.Reload();
 
                 FilesToDelBox.Items.Clear();
-                FilesToDelBox.Text = "";
+                FilesToDelBox.Text = string.Empty;
 
                 foreach (var item in Default.FilesToDelete)
                 {
@@ -275,7 +275,7 @@ namespace Maintenance
                 Default.Reload();
 
                 FilesHideBox.Items.Clear();
-                FilesHideBox.Text = "";
+                FilesHideBox.Text = string.Empty;
 
                 foreach (var item in Default.FilesToHide)
                 {
@@ -300,7 +300,7 @@ namespace Maintenance
                 Default.Reload();
 
                 PathFilesDelBox.Items.Clear();
-                PathFilesDelBox.Text = "";
+                PathFilesDelBox.Text = string.Empty;
 
                 foreach (var item in Default.PathFilesToDelete)
                 {
@@ -325,7 +325,7 @@ namespace Maintenance
                 Default.Reload();
 
                 PathFilesDelOldBox.Items.Clear();
-                PathFilesDelOldBox.Text = "";
+                PathFilesDelOldBox.Text = string.Empty;
 
                 foreach (var item in Default.PathFilesToDeleteOlder)
                 {
@@ -350,7 +350,7 @@ namespace Maintenance
                 Default.Reload();
 
                 ServicsDisableBox.Items.Clear();
-                ServicsDisableBox.Text = "";
+                ServicsDisableBox.Text = string.Empty;
 
                 foreach (var item in Default.ServicesToDisable)
                 {
@@ -375,7 +375,7 @@ namespace Maintenance
                 Default.Reload();
 
                 ServicesManualBox.Items.Clear();
-                ServicesManualBox.Text = "";
+                ServicesManualBox.Text = string.Empty;
 
                 foreach (var item in Default.ServicesToManual)
                 {
@@ -400,7 +400,7 @@ namespace Maintenance
                 Default.Reload();
 
                 TasksDisableBox.Items.Clear();
-                TasksDisableBox.Text = "";
+                TasksDisableBox.Text = string.Empty;
 
                 foreach (var item in Default.TasksToDisable)
                 {
@@ -418,7 +418,7 @@ namespace Maintenance
             bool ItemExists = false;
 
             var selected = ServicesTextBox.Text;
-            if (selected != null)
+            if (selected != string.Empty)
             {
                 foreach (string item in ServicsDisableBox.Items)
                 {
@@ -433,6 +433,8 @@ namespace Maintenance
                     ServicsDisableBox.Items.Add(selected);
                     Default.ServicesToDisable.Add(selected);
                 }
+
+                ServicesTextBox.Text = string.Empty;
             }
 
             Default.Save();
@@ -443,7 +445,7 @@ namespace Maintenance
             bool ItemExists = false;
 
             var selected = ServicesTextBox.Text;
-            if (selected != null)
+            if (selected != string.Empty)
             {
                 foreach (string item in ServicesManualBox.Items)
                 {
@@ -458,6 +460,8 @@ namespace Maintenance
                     ServicesManualBox.Items.Add(selected);
                     Default.ServicesToManual.Add(selected);
                 }
+
+                ServicesTextBox.Text = string.Empty;
             }
 
             Default.Save();
@@ -468,7 +472,7 @@ namespace Maintenance
             bool ItemExists = false;
 
             var selected = TasksTextBox.Text;
-            if (selected != null)
+            if (selected != string.Empty)
             {
                 foreach (string item in TasksDisableBox.Items)
                 {
@@ -483,6 +487,8 @@ namespace Maintenance
                     TasksDisableBox.Items.Add(selected);
                     Default.TasksToDisable.Add(selected);
                 }
+
+                TasksTextBox.Text = string.Empty;
             }
 
             Default.Save();
@@ -503,7 +509,7 @@ namespace Maintenance
 
                     bool ItemExists = false;
 
-                    if (SelectedPath != null)
+                    if (SelectedPath != string.Empty)
                     {
                         foreach (string item in comboBox.Items)
                         {
@@ -535,7 +541,7 @@ namespace Maintenance
 
                     bool ItemExists = false;
 
-                    if (SelectedPath != null)
+                    if (SelectedPath != string.Empty)
                     {
                         foreach (string item in comboBox.Items)
                         {
@@ -567,7 +573,7 @@ namespace Maintenance
 
             bool ItemExists = false;
 
-            if (SelectedPath != null)
+            if (SelectedPath != string.Empty)
             {
                 foreach (string item in comboBox.Items)
                 {
@@ -583,7 +589,7 @@ namespace Maintenance
                     collection.Add(SelectedPath);
                 }
 
-                comboBox.Text = "";
+                comboBox.Text = string.Empty;
             }
 
             Default.Save();

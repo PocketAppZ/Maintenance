@@ -16,7 +16,7 @@ namespace Maintenance
                 try
                 {
                     int days = Convert.ToInt32(path.Split(',')[0]);
-                    var filesPath = Environment.ExpandEnvironmentVariables(path.Split(',')[1]);
+                    var filesPath = Environment.ExpandEnvironmentVariables(path.Split(',')[1].Trim());
 
                     if (filesPath != "")
                     {
@@ -51,7 +51,7 @@ namespace Maintenance
                 try
                 {
                     int days = Convert.ToInt32(path.Split(',')[0]);
-                    var filesPath = Environment.ExpandEnvironmentVariables(path.Split(',')[1]);
+                    var filesPath = Environment.ExpandEnvironmentVariables(path.Split(',')[1].Trim());
 
                     if (filesPath != "")
                     {
