@@ -41,3 +41,5 @@ You can set scheduled tasks to run whenever you like. The following is recommend
 **TIPS:**  
   
 - You can add text to the combo box and press enter and it will be added
+
+- Disk Check is run once a month on next reboot from the first Monday's first boot up

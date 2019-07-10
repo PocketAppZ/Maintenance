@@ -17,18 +17,35 @@ namespace Maintenance
                 {
                     try
                     {
-                        Directory.Delete(dir);
+                        Directory.Delete(dir, true);
                         deleted = true;
                     }
                     catch (Exception ex)
                     {
-                        deleted = false;
-                        Logging.Error(dir + " : " + ex, "DeleteDirectories");
-                        continue;
+                        try
+                        {
+                            foreach (var subDirectoryPath in Directory.GetDirectories(dir))
+                            {
+                                var directoryInfo = new DirectoryInfo(subDirectoryPath);
+                                foreach (var filePath in directoryInfo.GetFiles())
+                                {
+                                    var file = new FileInfo(filePath.ToString());
+                                    file.Attributes = FileAttributes.Normal;
+                                }
+                            }
+
+                            Directory.Delete(dir, true);
+                        }
+                        catch (Exception)
+                        {
+                            deleted = false;
+                            Logging.Error(dir + " : " + ex, "DeleteDirectories");
+                            continue;
+                        }
                     }
                     if (deleted)
                     {
-                        Logging.Info("Deleting file: " + dir, "DeleteFiles");
+                        Logging.Info("Deleting directory: " + dir, "DeleteDirectories");
                     }
                 }
             }
