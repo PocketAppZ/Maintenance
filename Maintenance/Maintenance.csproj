@@ -67,10 +67,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeleteDirectories.cs" />
     <Compile Include="DeleteFiles.cs" />
     <Compile Include="DeleteInDirectory.cs" />
     <Compile Include="DeleteInDirectoryOlder.cs" />
-    <Compile Include="DisableServices.cs" />
+    <Compile Include="SetServices.cs" />
     <Compile Include="DisableTasks.cs" />
     <Compile Include="DiskCheck.cs" />
     <Compile Include="FullCheckup.cs" />

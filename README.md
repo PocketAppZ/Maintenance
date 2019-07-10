@@ -14,7 +14,9 @@ You can set scheduled tasks to run whenever you like. The following is recommend
 
 - Run at logon: Arguments: "/Logon" (no quotes)  - Set Name to Maintenance - Logon **This just does a quick cleanup**
 
-- Run Nightly: Arguments: "/FullCheckup /PuranFD C: -s1" (no quotes - REQUIRES Puran Defrag)  - Set Name to Maintenance - Nightly **This is Heavy maintenance**
+- If you shut off your computer every night but leave it on once in a while for maintenance: Run Nightly: Arguments: "/FullCheckup /PuranFD C: -s1" (no quotes - REQUIRES Puran Defrag)  - Set Name to Maintenance - Nightly **This is Heavy maintenance**  
+
+- If you leave your computer on every night: Run once or twice a month: Arguments: "/FullCheckup /PuranFD C: -s1" (no quotes - REQUIRES Puran Defrag)  - Set Name to Maintenance - Monthly **This is Heavy maintenance**  
   
   
 **GUI:**  

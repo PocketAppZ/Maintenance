@@ -5,30 +5,30 @@ using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
-    public class DeleteFiles
+    public class DeleteDirectories
     {
-        public static void DeleteSetFiles()
+        public static void DeleteSetPaths()
         {
             // Delete Files
-            foreach (string file in Default.FilesToDelete)
+            foreach (string dir in Default.FilesToDelete)
             {
                 bool deleted = false;
-                if (File.Exists(file))
+                if (Directory.Exists(dir))
                 {
                     try
                     {
-                        File.Delete(file);
+                        Directory.Delete(dir);
                         deleted = true;
                     }
                     catch (Exception ex)
                     {
                         deleted = false;
-                        Logging.Error(file + " : " + ex, "DeleteFiles");
+                        Logging.Error(dir + " : " + ex, "DeleteDirectories");
                         continue;
                     }
                     if (deleted)
                     {
-                        Logging.Info("Deleting file: " + file, "DeleteFiles");
+                        Logging.Info("Deleting file: " + dir, "DeleteFiles");
                     }
                 }
             }

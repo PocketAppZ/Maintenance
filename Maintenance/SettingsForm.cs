@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.ServiceProcess;
 using System.Windows.Forms;
 using static Maintenance.Properties.Settings;
 
@@ -44,9 +45,14 @@ namespace Maintenance
                 PathFilesDelOldBox.Items.Add(item);
             }
 
+            foreach (var item in Default.DirectoriesToHide)
+            {
+                PathHideListBox.Items.Add(item);
+            }
+
             foreach (var item in Default.ServicesToDisable)
             {
-                ServicsDisableBox.Items.Add(item);
+                ServicesDisableBox.Items.Add(item);
             }
 
             foreach (var item in Default.ServicesToManual)
@@ -57,6 +63,11 @@ namespace Maintenance
             foreach (var item in Default.TasksToDisable)
             {
                 TasksDisableBox.Items.Add(item);
+            }
+
+            foreach (var item in Default.ExclusionList)
+            {
+                ExclusionListBox.Items.Add(item);
             }
 
             LoggingBox.Checked = Default.LoggingEnabled;
@@ -79,16 +90,20 @@ namespace Maintenance
             DirToDelBox.KeyDown += DirToDelBox_KeyDown;
             PathFilesDelBox.KeyDown += PathFilesDelBox_KeyDown;
             PathFilesDelOldBox.KeyDown += PathFilesDelOldBox_KeyDown;
-            ServicsDisableBox.KeyDown += ServicsDisableBox_KeyDown;
+            PathHideListBox.KeyDown += PathHideListBox_KeyDown;
+            ServicesDisableBox.KeyDown += ServicsDisableBox_KeyDown;
             ServicesManualBox.KeyDown += ServicesManualBox_KeyDown;
             TasksDisableBox.KeyDown += TasksDisableBox_KeyDown;
+            TasksTextBox.KeyDown += TasksTextBox_KeyDown;
+            ExclusionListBox.KeyDown += ExclusionListBox_KeyDown;
+            ExclusionListTextBox.KeyDown += ExclusionListTextBox_KeyDown;
         }
 
         private void FilesToDelBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(FilesToDelBox, Default.FilesToDelete);
+                AddTexValuesComboBox(FilesToDelBox, Default.FilesToDelete);
             }
         }
 
@@ -96,7 +111,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(FilesHideBox, Default.FilesToHide);
+                AddTexValuesComboBox(FilesHideBox, Default.FilesToHide);
             }
         }
 
@@ -104,7 +119,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(DirToDelBox, Default.DirectoriesToDelete);
+                AddTexValuesComboBox(DirToDelBox, Default.DirectoriesToDelete);
             }
         }
 
@@ -112,7 +127,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(PathFilesDelBox, Default.PathFilesToDelete);
+                AddTexValuesComboBox(PathFilesDelBox, Default.PathFilesToDelete);
             }
         }
 
@@ -120,7 +135,15 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(PathFilesDelOldBox, Default.PathFilesToDeleteOlder);
+                AddTexValuesComboBox(PathFilesDelOldBox, Default.PathFilesToDeleteOlder);
+            }
+        }
+
+        private void PathHideListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuesComboBox(PathHideListBox, Default.DirectoriesToHide, true);
             }
         }
 
@@ -128,7 +151,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(ServicsDisableBox, Default.ServicesToDisable);
+                AddTexValuesComboBox(ServicesDisableBox, Default.ServicesToDisable, true);
             }
         }
 
@@ -136,7 +159,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(ServicesManualBox, Default.ServicesToManual);
+                AddTexValuesComboBox(ServicesManualBox, Default.ServicesToManual, true);
             }
         }
 
@@ -144,7 +167,31 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuest(TasksDisableBox, Default.TasksToDisable);
+                AddTexValuesComboBox(TasksDisableBox, Default.TasksToDisable);
+            }
+        }
+
+        private void TasksTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuesTextBox(TasksTextBox, TasksDisableBox, Default.TasksToDisable);
+            }
+        }
+
+        private void ExclusionListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuesComboBox(ExclusionListBox, Default.ExclusionList);
+            }
+        }
+
+        private void ExclusionListTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddTexValuesTextBox(ExclusionListTextBox, ExclusionListBox, Default.ExclusionList);
             }
         }
 
@@ -187,7 +234,7 @@ namespace Maintenance
 
         #endregion CheckBoxes and Help Button
 
-        #region Browse Buttons
+        #region Add Buttons
 
         private void DirDelBrowse_Click(object sender, EventArgs e)
         {
@@ -214,7 +261,39 @@ namespace Maintenance
             DirectoryBrowser(PathFilesDelOldBox, Default.PathFilesToDeleteOlder);
         }
 
-        #endregion Browse Buttons
+        private void PathHideBrowse_Click(object sender, EventArgs e)
+        {
+            DirectoryBrowser(PathHideListBox, Default.DirectoriesToHide);
+        }
+
+        private void ExclusionListAdd_Click(object sender, EventArgs e)
+        {
+            bool ItemExists = false;
+
+            var selected = ExclusionListTextBox.Text;
+            if (selected != string.Empty)
+            {
+                foreach (string item in ExclusionListBox.Items)
+                {
+                    if (item == selected)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    ExclusionListBox.Items.Add(selected);
+                    Default.ExclusionList.Add(selected);
+                }
+
+                ExclusionListTextBox.Text = string.Empty;
+            }
+
+            Default.Save();
+        }
+
+        #endregion Add Buttons
 
         #region Remove Buttons
 
@@ -334,13 +413,38 @@ namespace Maintenance
             }
         }
 
+        private void PathHideRemove_Click(object sender, EventArgs e)
+        {
+            if (PathHideListBox.SelectedItem != null)
+            {
+                foreach (var item in Default.DirectoriesToHide)
+                {
+                    if (item == PathHideListBox.SelectedItem.ToString())
+                    {
+                        Default.DirectoriesToHide.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
+
+                PathHideListBox.Items.Clear();
+                PathHideListBox.Text = string.Empty;
+
+                foreach (var item in Default.DirectoriesToHide)
+                {
+                    PathHideListBox.Items.Add(item);
+                }
+            }
+        }
+
         private void ServicesDisableRemove_Click(object sender, EventArgs e)
         {
-            if (ServicsDisableBox.SelectedItem != null)
+            if (ServicesDisableBox.SelectedItem != null)
             {
                 foreach (var item in Default.ServicesToDisable)
                 {
-                    if (item == ServicsDisableBox.SelectedItem.ToString())
+                    if (item == ServicesDisableBox.SelectedItem.ToString())
                     {
                         Default.ServicesToDisable.Remove(item);
                         break;
@@ -349,12 +453,12 @@ namespace Maintenance
                 Default.Save();
                 Default.Reload();
 
-                ServicsDisableBox.Items.Clear();
-                ServicsDisableBox.Text = string.Empty;
+                ServicesDisableBox.Items.Clear();
+                ServicesDisableBox.Text = string.Empty;
 
                 foreach (var item in Default.ServicesToDisable)
                 {
-                    ServicsDisableBox.Items.Add(item);
+                    ServicesDisableBox.Items.Add(item);
                 }
             }
         }
@@ -409,6 +513,31 @@ namespace Maintenance
             }
         }
 
+        private void ExclusionListRemove_Click(object sender, EventArgs e)
+        {
+            if (ExclusionListBox.SelectedItem != null)
+            {
+                foreach (var item in Default.ExclusionList)
+                {
+                    if (item == ExclusionListBox.SelectedItem.ToString())
+                    {
+                        Default.ExclusionList.Remove(item);
+                        break;
+                    }
+                }
+                Default.Save();
+                Default.Reload();
+
+                ExclusionListBox.Items.Clear();
+                ExclusionListBox.Text = string.Empty;
+
+                foreach (var item in Default.ExclusionList)
+                {
+                    ExclusionListBox.Items.Add(item);
+                }
+            }
+        }
+
         #endregion Remove Buttons
 
         #region Services and Tasks Buttons
@@ -420,7 +549,7 @@ namespace Maintenance
             var selected = ServicesTextBox.Text;
             if (selected != string.Empty)
             {
-                foreach (string item in ServicsDisableBox.Items)
+                foreach (string item in ServicesDisableBox.Items)
                 {
                     if (item == selected)
                     {
@@ -430,8 +559,11 @@ namespace Maintenance
                 }
                 if (!ItemExists)
                 {
-                    ServicsDisableBox.Items.Add(selected);
-                    Default.ServicesToDisable.Add(selected);
+                    ServiceController sc = new ServiceController(selected);
+                    var displayName = sc.DisplayName;
+
+                    ServicesDisableBox.Items.Add(selected + ';' + displayName);
+                    Default.ServicesToDisable.Add(selected + ';' + displayName);
                 }
 
                 ServicesTextBox.Text = string.Empty;
@@ -457,8 +589,11 @@ namespace Maintenance
                 }
                 if (!ItemExists)
                 {
-                    ServicesManualBox.Items.Add(selected);
-                    Default.ServicesToManual.Add(selected);
+                    ServiceController sc = new ServiceController(selected);
+                    var displayName = sc.DisplayName;
+
+                    ServicesManualBox.Items.Add(selected + ';' + displayName);
+                    Default.ServicesToManual.Add(selected + ';' + displayName);
                 }
 
                 ServicesTextBox.Text = string.Empty;
@@ -567,9 +702,48 @@ namespace Maintenance
 
         #region File and Folder Add Text (Key:Enter)
 
-        private void AddTexValuest(ComboBox comboBox, StringCollection collection)
+        private void AddTexValuesComboBox(ComboBox comboBox, StringCollection collection, bool isService = false)
         {
             string SelectedPath = comboBox.Text;
+
+            bool ItemExists = false;
+
+            if (SelectedPath != string.Empty)
+            {
+                foreach (string item in comboBox.Items)
+                {
+                    if (item == SelectedPath)
+                    {
+                        ItemExists = true;
+                        break;
+                    }
+                }
+                if (!ItemExists)
+                {
+                    if (!isService)
+                    {
+                        comboBox.Items.Add(SelectedPath);
+                        collection.Add(SelectedPath);
+                    }
+                    else
+                    {
+                        ServiceController sc = new ServiceController(SelectedPath);
+                        var displayName = sc.DisplayName;
+
+                        comboBox.Items.Add(SelectedPath + ';' + displayName);
+                        collection.Add(SelectedPath + ';' + displayName);
+                    }
+                }
+
+                comboBox.Text = string.Empty;
+            }
+
+            Default.Save();
+        }
+
+        private void AddTexValuesTextBox(TextBox textBox, ComboBox comboBox, StringCollection collection)
+        {
+            string SelectedPath = textBox.Text;
 
             bool ItemExists = false;
 
@@ -589,7 +763,7 @@ namespace Maintenance
                     collection.Add(SelectedPath);
                 }
 
-                comboBox.Text = string.Empty;
+                textBox.Text = string.Empty;
             }
 
             Default.Save();

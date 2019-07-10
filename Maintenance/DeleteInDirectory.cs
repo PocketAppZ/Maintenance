@@ -10,94 +10,60 @@ namespace Maintenance
         public static void DeleteSetFiles()
         {
             // Delete Files and Folders in a Directory
-            int deleteTemp = 0;
             foreach (string paths in Default.PathFilesToDelete)
             {
                 try
                 {
-                    var filesPath = Environment.ExpandEnvironmentVariables(paths);
-                    if (filesPath != "")
+                    if (Directory.Exists(paths))
                     {
-                        try
-                        {
-                            foreach (string file in Directory.GetFiles(filesPath))
-                            {
-                                try
-                                {
-                                    if (!file.Contains(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp"))
-                                    {
-                                        Logging.Info("Deleting file: " + file, "DeleteInDirectory");
-                                        File.Delete(file);
-                                    }
-                                    else
-                                    {
-                                        deleteTemp++;
-                                        if (deleteTemp == 1)
-                                        {
-                                            Logging.Info("Deleting temp files", "DeleteInDirectory");
+                        var filesPath = Environment.ExpandEnvironmentVariables(paths);
 
-                                            DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(file));
-
-                                            DeleteTemp(directory);
-                                        }
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    continue;
-                                }
-                            }
-                        }
-                        catch (Exception)
+                        // Files
+                        foreach (string file in Directory.GetFiles(filesPath))
                         {
-                            continue;
-                        }
-                        foreach (string directory in Directory.GetDirectories(filesPath))
-                        {
+                            bool deleted = false;
                             try
                             {
-                                Logging.Info("Deleting directory: " + directory, "DeleteInDirectory");
-
-                                Directory.Delete(directory, true);
+                                File.Delete(file);
+                                deleted = true;
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
+                                deleted = false;
+                                Logging.Error(file + " : " + ex, "DeleteInDirectory");
                                 continue;
+                            }
+                            if (deleted)
+                            {
+                                Logging.Info("Deleting file: " + file, "DeleteInDirectory");
+                            }
+                        }
+
+                        // Directories
+                        foreach (string directory in Directory.GetDirectories(filesPath))
+                        {
+                            bool deleted = false;
+                            try
+                            {
+                                Directory.Delete(directory, true);
+                                deleted = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                deleted = false;
+                                Logging.Error(directory + " : " + ex, "DeleteInDirectory");
+                                continue;
+                            }
+                            if (deleted)
+                            {
+                                Logging.Info("Deleting directory: " + directory, "DeleteInDirectory");
                             }
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    continue;
-                }
-            }
-        }
-
-        private static void DeleteTemp(DirectoryInfo directory)
-        {
-            foreach (FileInfo file in directory.GetFiles())
-            {
-                try
-                {
-                    if (DateTime.UtcNow - file.CreationTimeUtc > TimeSpan.FromHours(6))
-                    {
-                        file.Delete();
-                    }
-                }
-                catch (Exception)
-                {
-                    continue;
-                }
-            }
-            foreach (DirectoryInfo subDirectory in directory.GetDirectories())
-            {
-                try
-                {
-                    subDirectory.Delete(true);
-                }
-                catch (Exception)
-                {
+                    Logging.Error(paths + " : " + ex, "DeleteInDirectory");
                     continue;
                 }
             }

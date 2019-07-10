@@ -12,12 +12,12 @@ namespace Maintenance
             // Disable Tasks
             foreach (string task in Default.TasksToDisable)
             {
-                Taskexistance(task);
+                DisableSetTask(task);
             }
         }
 
         // Disable Sceduled Tasks
-        static void Taskexistance(string taskname)
+        static void DisableSetTask(string taskname)
         {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = "schtasks.exe";

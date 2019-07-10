@@ -12,9 +12,9 @@ namespace Maintenance
             // Hide Files
             foreach (var hideFile in Default.FilesToHide)
             {
-                var filePath = Environment.ExpandEnvironmentVariables(hideFile);
-                if (filePath != "")
+                try
                 {
+                    var filePath = Environment.ExpandEnvironmentVariables(hideFile);
                     if (File.Exists(filePath))
                     {
                         if ((File.GetAttributes(filePath) & FileAttributes.Hidden) != FileAttributes.Hidden)
@@ -29,7 +29,21 @@ namespace Maintenance
                             }
                         }
                     }
-                    else if (Directory.Exists(filePath))
+                }
+                catch (Exception ex)
+                {
+                    Logging.Error(hideFile + " : " + ex, "SetServices");
+                    continue;
+                }
+            }
+
+            // Hide Directories
+            foreach (var hideFile in Default.DirectoriesToHide)
+            {
+                try
+                {
+                    var filePath = Environment.ExpandEnvironmentVariables(hideFile);
+                    if (Directory.Exists(filePath))
                     {
                         if ((File.GetAttributes(filePath) & FileAttributes.Hidden) != FileAttributes.Hidden)
                         {
@@ -43,6 +57,11 @@ namespace Maintenance
                             }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Error(hideFile + " : " + ex, "SetServices");
+                    continue;
                 }
             }
         }

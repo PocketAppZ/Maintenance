@@ -115,7 +115,7 @@ namespace Maintenance
 
             if (Default.RunDiskCheckMonthly)
             {
-                Logging.Info("*********************  Schedule Disck Check  *********************" + Environment.NewLine, "Program");
+                Logging.Info("*********************  Schedule Disk Check  *********************" + Environment.NewLine, "Program");
                 DiskCheck.ScheduleCheck();
             }
 
@@ -128,7 +128,7 @@ namespace Maintenance
             if (Default.ServicesToManual.Count > 0 || Default.ServicesToDisable.Count > 0)
             {
                 Logging.Info("*********************  Unused Services To Manual  *********************" + Environment.NewLine, "Program");
-                DisableServices.SetServices();
+                SetServices.SetStatus();
             }
 
             if (Default.FilesToHide.Count > 0)
@@ -145,14 +145,20 @@ namespace Maintenance
 
             if (Default.PathFilesToDeleteOlder.Count > 0)
             {
-                Logging.Info("*********************  DeleteInDirectoryOlder.DeleteSetFiles  *********************" + Environment.NewLine, "Program");
+                Logging.Info("*********************  Delete Files in Directory Older  *********************" + Environment.NewLine, "Program");
                 DeleteInDirectoryOlder.DeleteSetFiles();
             }
 
             if (Default.FilesToDelete.Count > 0)
             {
-                Logging.Info("*********************  DeleteFiles.DeleteSetFiles  *********************" + Environment.NewLine, "Program");
+                Logging.Info("*********************  Delete Specific Files  *********************" + Environment.NewLine, "Program");
                 DeleteFiles.DeleteSetFiles();
+            }
+
+            if (Default.DirectoriesToDelete.Count > 0)
+            {
+                Logging.Info("*********************  Delete Specific Directories  *********************" + Environment.NewLine, "Program");
+                DeleteDirectories.DeleteSetPaths();
             }
         }
     }

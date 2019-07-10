@@ -8,23 +8,26 @@ using static Maintenance.Properties.Settings;
 
 namespace Maintenance
 {
-    public class DisableServices
+    public class SetServices
     {
-        public static void SetServices()
+        public static void SetStatus()
         {
             // Services To Manual
             foreach (string service in Default.ServicesToManual)
             {
+                string serv = service.Split(';')[0];
+
                 try
                 {
-                    if (ServiceStatus(service) != "Manual")
+                    if (ServiceStatus(serv) != "Manual")
                     {
-                        SetService(service, "Manual");
-                        StopServices(service);
+                        SetService(serv, "Manual");
+                        StopServices(serv);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Logging.Error(service + " : " + ex, "SetServices");
                     continue;
                 }
             }
@@ -32,16 +35,19 @@ namespace Maintenance
             // Services To Disable
             foreach (string service in Default.ServicesToDisable)
             {
+                string serv = service.Split(';')[0];
+
                 try
                 {
-                    if (ServiceStatus(service) != "Disabled")
+                    if (ServiceStatus(serv) != "Disabled")
                     {
-                        SetService(service, "Disabled");
-                        StopServices(service);
+                        SetService(serv, "Disabled");
+                        StopServices(serv);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Logging.Error(service + " : " + ex, "SetServices");
                     continue;
                 }
             }

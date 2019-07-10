@@ -68,7 +68,7 @@ namespace Maintenance
             }
             catch (Exception ex)
             {
-                Logging.Error(ex, "FullCheckup - Process");
+                Logging.Error("Filename: " + filename + " args: " + args + " : " + ex, "FullCheckup - Process");
             }
         }
 
@@ -81,7 +81,10 @@ namespace Maintenance
                     if (!e.Data.Contains("[=") && !e.Data.Contains("%") && e.Data != string.Empty)
                     {
                         string Output = Regex.Replace(e.Data, "\x00", "");
-                        Logging.Info(Output, "Full Checkup - Data Recieved");
+                        if (Output != string.Empty)
+                        {
+                            Logging.Info(Output, "Full Checkup - Data Recieved");
+                        }
                     }
                 }
             }
