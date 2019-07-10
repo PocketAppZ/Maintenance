@@ -1,5 +1,6 @@
 ﻿using Logger;
 using System;
+using System.Diagnostics;
 using System.IO;
 using static Maintenance.Properties.Settings;
 
@@ -24,13 +25,30 @@ namespace Maintenance
                     {
                         try
                         {
+                            using (Process proc = new Process())
+                            {
+                                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                proc.StartInfo.CreateNoWindow = true;
+                                proc.StartInfo.UseShellExecute = false;
+                                proc.StartInfo.FileName = "cmd.exe";
+                                proc.StartInfo.Arguments = "/C takeown /a /r /d Y /f" + dir;
+                                proc.Start();
+                                proc.WaitForExit();
+                            }
+                            var file = new FileInfo(dir.ToString())
+                            {
+                                Attributes = FileAttributes.Normal
+                            };
+
                             foreach (var subDirectoryPath in Directory.GetDirectories(dir))
                             {
                                 var directoryInfo = new DirectoryInfo(subDirectoryPath);
                                 foreach (var filePath in directoryInfo.GetFiles())
                                 {
-                                    var file = new FileInfo(filePath.ToString());
-                                    file.Attributes = FileAttributes.Normal;
+                                    file = new FileInfo(filePath.ToString())
+                                    {
+                                        Attributes = FileAttributes.Normal
+                                    };
                                 }
                             }
 
