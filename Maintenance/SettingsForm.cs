@@ -300,41 +300,47 @@ namespace Maintenance
 
         private void DirDelRemove_Click(object sender, EventArgs e)
         {
-            DirToDelBox.Items.Remove(DirToDelBox.SelectedItem);
-            foreach (string item in Default.DirectoriesToDelete)
+            if (DirToDelBox.SelectedItem != null)
             {
-                if (item == DirToDelBox.SelectedItem.ToString())
+                DirToDelBox.Items.Remove(DirToDelBox.SelectedItem);
+                foreach (string item in Default.DirectoriesToDelete)
                 {
-                    Default.DirectoriesToDelete.Remove(item);
+                    if (item == DirToDelBox.SelectedItem.ToString())
+                    {
+                        Default.DirectoriesToDelete.Remove(item);
 
-                    break;
+                        break;
+                    }
                 }
-            }
 
-            Default.Save();
+                Default.Save();
+            }
         }
 
         private void FilesDelRemove_Click(object sender, EventArgs e)
         {
             if (FilesToDelBox.SelectedItem != null)
             {
-                foreach (var item in Default.FilesToDelete)
+                if (FilesToDelBox.SelectedItem != null)
                 {
-                    if (item == FilesToDelBox.SelectedItem.ToString())
+                    foreach (var item in Default.FilesToDelete)
                     {
-                        Default.FilesToDelete.Remove(item);
-                        break;
+                        if (item == FilesToDelBox.SelectedItem.ToString())
+                        {
+                            Default.FilesToDelete.Remove(item);
+                            break;
+                        }
                     }
-                }
-                Default.Save();
-                Default.Reload();
+                    Default.Save();
+                    Default.Reload();
 
-                FilesToDelBox.Items.Clear();
-                FilesToDelBox.Text = string.Empty;
+                    FilesToDelBox.Items.Clear();
+                    FilesToDelBox.Text = string.Empty;
 
-                foreach (var item in Default.FilesToDelete)
-                {
-                    FilesToDelBox.Items.Add(item);
+                    foreach (var item in Default.FilesToDelete)
+                    {
+                        FilesToDelBox.Items.Add(item);
+                    }
                 }
             }
         }
