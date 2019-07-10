@@ -547,21 +547,24 @@ namespace Maintenance
             bool ItemExists = false;
 
             var selected = ServicesTextBox.Text;
+
             if (selected != string.Empty)
             {
+                ServiceController sc = new ServiceController(selected);
+
+                var displayName = sc.DisplayName;
+
                 foreach (string item in ServicesDisableBox.Items)
                 {
-                    if (item == selected)
+                    if (item == selected + ';' + displayName)
                     {
                         ItemExists = true;
                         break;
                     }
                 }
+
                 if (!ItemExists)
                 {
-                    ServiceController sc = new ServiceController(selected);
-                    var displayName = sc.DisplayName;
-
                     ServicesDisableBox.Items.Add(selected + ';' + displayName);
                     Default.ServicesToDisable.Add(selected + ';' + displayName);
                 }
@@ -577,21 +580,24 @@ namespace Maintenance
             bool ItemExists = false;
 
             var selected = ServicesTextBox.Text;
+
             if (selected != string.Empty)
             {
+                ServiceController sc = new ServiceController(selected);
+
+                var displayName = sc.DisplayName;
+
                 foreach (string item in ServicesManualBox.Items)
                 {
-                    if (item == selected)
+                    if (item == selected + ';' + displayName)
                     {
                         ItemExists = true;
                         break;
                     }
                 }
+
                 if (!ItemExists)
                 {
-                    ServiceController sc = new ServiceController(selected);
-                    var displayName = sc.DisplayName;
-
                     ServicesManualBox.Items.Add(selected + ';' + displayName);
                     Default.ServicesToManual.Add(selected + ';' + displayName);
                 }
@@ -730,8 +736,19 @@ namespace Maintenance
                         ServiceController sc = new ServiceController(SelectedPath);
                         var displayName = sc.DisplayName;
 
-                        comboBox.Items.Add(SelectedPath + ';' + displayName);
-                        collection.Add(SelectedPath + ';' + displayName);
+                        foreach (string item in comboBox.Items)
+                        {
+                            if (item == SelectedPath + ';' + displayName)
+                            {
+                                ItemExists = true;
+                                break;
+                            }
+                        }
+                        if (!ItemExists)
+                        {
+                            comboBox.Items.Add(SelectedPath + ';' + displayName);
+                            collection.Add(SelectedPath + ';' + displayName);
+                        }
                     }
                 }
 
