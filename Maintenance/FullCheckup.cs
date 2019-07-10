@@ -29,7 +29,7 @@ namespace Maintenance
 
             // Run Offline Defrag
             Logging.Info("*******************************  Offline Defrag  *******************************" + Environment.NewLine, "FullCheckup");
-            if (PuranDefragArgs != string.Empty && File.Exists("PuranFD.exe"))
+            if (PuranDefragArgs != string.Empty && File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\PuranFD.exe"))
             {
                 RunCommand("PuranFD.exe", PuranDefragArgs);
             }
