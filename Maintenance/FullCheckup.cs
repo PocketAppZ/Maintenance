@@ -15,24 +15,24 @@ namespace Maintenance
             Logging.Info("*******************************  Flush DNS  *******************************" + Environment.NewLine, "FullCheckup");
             RunCommand("cmd.exe", "/C ipconfig /flushdns");
 
-            //// DISM Restorehealth
-            //Logging.Info("*******************************  DISM Restorehealth  *******************************" + Environment.NewLine, "FullCheckup");
-            //RunCommand("cmd.exe", "/C DISM.exe /Online /Cleanup-image /Restorehealth");
+            // DISM Restorehealth
+            Logging.Info("*******************************  DISM Restorehealth  *******************************" + Environment.NewLine, "FullCheckup");
+            RunCommand("cmd.exe", "/C DISM.exe /Online /Cleanup-image /Restorehealth");
 
-            //// DISM startcomponentcleanup
-            //Logging.Info("*******************************  DISM Component Cleanup  *******************************" + Environment.NewLine, "FullCheckup");
-            //RunCommand("cmd.exe", "/C DISM.exe /online /cleanup-image /startcomponentcleanup");
+            // DISM startcomponentcleanup
+            Logging.Info("*******************************  DISM Component Cleanup  *******************************" + Environment.NewLine, "FullCheckup");
+            RunCommand("cmd.exe", "/C DISM.exe /online /cleanup-image /startcomponentcleanup");
 
-            //// System File Checker
-            //Logging.Info("*******************************  System File Checker  *******************************" + Environment.NewLine, "FullCheckup");
-            //RunCommand("cmd.exe", "/C sfc /scannow");
+            // System File Checker
+            Logging.Info("*******************************  System File Checker  *******************************" + Environment.NewLine, "FullCheckup");
+            RunCommand("cmd.exe", "/C sfc /scannow");
 
-            //// Run Offline Defrag
-            //Logging.Info("*******************************  Offline Defrag  *******************************" + Environment.NewLine, "FullCheckup");
-            //if (PuranDefragArgs != string.Empty && File.Exists("PuranFD.exe"))
-            //{
-            //    RunCommand("PuranFD.exe", PuranDefragArgs);
-            //}
+            // Run Offline Defrag
+            Logging.Info("*******************************  Offline Defrag  *******************************" + Environment.NewLine, "FullCheckup");
+            if (PuranDefragArgs != string.Empty && File.Exists("PuranFD.exe"))
+            {
+                RunCommand("PuranFD.exe", PuranDefragArgs);
+            }
         }
 
         private static void RunCommand(string filename, string args)

@@ -27,9 +27,12 @@ namespace Maintenance
                                 FileInfo fi = new FileInfo(f);
                                 if (fi.CreationTime < DateTime.Now.AddDays(-days))
                                 {
-                                    Logging.Info("Deleting file: " + f, "DeleteInDirectoryOlder");
-
                                     File.Delete(f);
+
+                                    if (!File.Exists(f))
+                                    {
+                                        Logging.Info("Deleting file: " + f, "DeleteInDirectoryOlder");
+                                    }
                                 }
                             }
                             catch (Exception)
@@ -62,9 +65,12 @@ namespace Maintenance
                                 DirectoryInfo fi = new DirectoryInfo(d);
                                 if (fi.CreationTime < DateTime.Now.AddDays(-days))
                                 {
-                                    Logging.Info("Deleting file: " + d, "DeleteInDirectoryOlder");
-
                                     Directory.Delete(d, true);
+
+                                    if (!File.Exists(d))
+                                    {
+                                        Logging.Info("Deleting file: " + d, "DeleteInDirectoryOlder");
+                                    }
                                 }
                             }
                             catch (Exception)
