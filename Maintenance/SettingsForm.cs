@@ -143,7 +143,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuesComboBox(PathHideListBox, Default.DirectoriesToHide, true);
+                AddTexValuesComboBox(PathHideListBox, Default.DirectoriesToHide);
             }
         }
 
@@ -151,7 +151,7 @@ namespace Maintenance
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddTexValuesComboBox(ServicesDisableBox, Default.ServicesToDisable, true);
+                AddTexValuesComboBox(ServicesDisableBox, Default.ServicesToDisable);
             }
         }
 
