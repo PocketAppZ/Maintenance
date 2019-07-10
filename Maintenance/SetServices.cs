@@ -19,7 +19,8 @@ namespace Maintenance
 
                 try
                 {
-                    if (ServiceStatus(serv) != "Manual")
+                    var status = ServiceStatus(serv);
+                    if (status != "NA" && ServiceStatus(serv) != "Manual")
                     {
                         SetService(serv, "Manual");
                         StopServices(serv);
@@ -39,7 +40,8 @@ namespace Maintenance
 
                 try
                 {
-                    if (ServiceStatus(serv) != "Disabled")
+                    var status = ServiceStatus(serv);
+                    if (status != "NA" && ServiceStatus(serv) != "Disabled")
                     {
                         SetService(serv, "Disabled");
                         StopServices(serv);
@@ -90,6 +92,10 @@ namespace Maintenance
                 {
                     status = (service["StartMode"]).ToString();
                 }
+            }
+            else if (!ServiceExists(serviceName))
+            {
+                status = "NA";
             }
 
             return status;

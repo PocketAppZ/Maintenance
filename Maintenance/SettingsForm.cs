@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.ServiceProcess;
@@ -550,23 +551,30 @@ namespace Maintenance
 
             if (selected != string.Empty)
             {
-                ServiceController sc = new ServiceController(selected);
-
-                var displayName = sc.DisplayName;
-
-                foreach (string item in ServicesDisableBox.Items)
+                try
                 {
-                    if (item == selected + ';' + displayName)
+                    ServiceController sc = new ServiceController(selected);
+
+                    var displayName = sc.DisplayName;
+
+                    foreach (string item in ServicesDisableBox.Items)
                     {
-                        ItemExists = true;
-                        break;
+                        if (item == selected + ';' + displayName)
+                        {
+                            ItemExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!ItemExists)
+                    {
+                        ServicesDisableBox.Items.Add(selected + ';' + displayName);
+                        Default.ServicesToDisable.Add(selected + ';' + displayName);
                     }
                 }
-
-                if (!ItemExists)
+                catch (Exception ex)
                 {
-                    ServicesDisableBox.Items.Add(selected + ';' + displayName);
-                    Default.ServicesToDisable.Add(selected + ';' + displayName);
+                    Logging.Error(selected + " : " + ex, "SettingsForm");
                 }
 
                 ServicesTextBox.Text = string.Empty;
@@ -583,23 +591,30 @@ namespace Maintenance
 
             if (selected != string.Empty)
             {
-                ServiceController sc = new ServiceController(selected);
-
-                var displayName = sc.DisplayName;
-
-                foreach (string item in ServicesManualBox.Items)
+                try
                 {
-                    if (item == selected + ';' + displayName)
+                    ServiceController sc = new ServiceController(selected);
+
+                    var displayName = sc.DisplayName;
+
+                    foreach (string item in ServicesManualBox.Items)
                     {
-                        ItemExists = true;
-                        break;
+                        if (item == selected + ';' + displayName)
+                        {
+                            ItemExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!ItemExists)
+                    {
+                        ServicesManualBox.Items.Add(selected + ';' + displayName);
+                        Default.ServicesToManual.Add(selected + ';' + displayName);
                     }
                 }
-
-                if (!ItemExists)
+                catch (Exception ex)
                 {
-                    ServicesManualBox.Items.Add(selected + ';' + displayName);
-                    Default.ServicesToManual.Add(selected + ';' + displayName);
+                    Logging.Error(selected + " : " + ex, "SettingsForm");
                 }
 
                 ServicesTextBox.Text = string.Empty;
@@ -646,15 +661,15 @@ namespace Maintenance
                 DialogResult result = browserDialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    string SelectedPath = browserDialog.SelectedPath;
+                    string selected = browserDialog.SelectedPath;
 
                     bool ItemExists = false;
 
-                    if (SelectedPath != string.Empty)
+                    if (selected != string.Empty)
                     {
                         foreach (string item in comboBox.Items)
                         {
-                            if (item == SelectedPath)
+                            if (item == selected)
                             {
                                 ItemExists = true;
                                 break;
@@ -662,8 +677,8 @@ namespace Maintenance
                         }
                         if (!ItemExists)
                         {
-                            comboBox.Items.Add(SelectedPath);
-                            collection.Add(SelectedPath);
+                            comboBox.Items.Add(selected);
+                            collection.Add(selected);
                         }
                     }
 
@@ -678,15 +693,15 @@ namespace Maintenance
                 DialogResult result = browserDialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    string SelectedPath = browserDialog.FileName;
+                    string selected = browserDialog.FileName;
 
                     bool ItemExists = false;
 
-                    if (SelectedPath != string.Empty)
+                    if (selected != string.Empty)
                     {
                         foreach (string item in comboBox.Items)
                         {
-                            if (item == SelectedPath)
+                            if (item == selected)
                             {
                                 ItemExists = true;
                                 break;
@@ -694,8 +709,8 @@ namespace Maintenance
                         }
                         if (!ItemExists)
                         {
-                            comboBox.Items.Add(SelectedPath);
-                            collection.Add(SelectedPath);
+                            comboBox.Items.Add(selected);
+                            collection.Add(selected);
                         }
                     }
 
@@ -710,15 +725,15 @@ namespace Maintenance
 
         private void AddTexValuesComboBox(ComboBox comboBox, StringCollection collection, bool isService = false)
         {
-            string SelectedPath = comboBox.Text;
+            string selected = comboBox.Text;
 
             bool ItemExists = false;
 
-            if (SelectedPath != string.Empty)
+            if (selected != string.Empty)
             {
                 foreach (string item in comboBox.Items)
                 {
-                    if (item == SelectedPath)
+                    if (item == selected)
                     {
                         ItemExists = true;
                         break;
@@ -728,26 +743,33 @@ namespace Maintenance
                 {
                     if (!isService)
                     {
-                        comboBox.Items.Add(SelectedPath);
-                        collection.Add(SelectedPath);
+                        comboBox.Items.Add(selected);
+                        collection.Add(selected);
                     }
                     else
                     {
-                        ServiceController sc = new ServiceController(SelectedPath);
-                        var displayName = sc.DisplayName;
-
-                        foreach (string item in comboBox.Items)
+                        try
                         {
-                            if (item == SelectedPath + ';' + displayName)
+                            ServiceController sc = new ServiceController(selected);
+                            var displayName = sc.DisplayName;
+
+                            foreach (string item in comboBox.Items)
                             {
-                                ItemExists = true;
-                                break;
+                                if (item == selected + ';' + displayName)
+                                {
+                                    ItemExists = true;
+                                    break;
+                                }
+                            }
+                            if (!ItemExists)
+                            {
+                                comboBox.Items.Add(selected + ';' + displayName);
+                                collection.Add(selected + ';' + displayName);
                             }
                         }
-                        if (!ItemExists)
+                        catch (Exception ex)
                         {
-                            comboBox.Items.Add(SelectedPath + ';' + displayName);
-                            collection.Add(SelectedPath + ';' + displayName);
+                            Logging.Error(selected + " : " + ex, "SettingsForm");
                         }
                     }
                 }
@@ -760,15 +782,15 @@ namespace Maintenance
 
         private void AddTexValuesTextBox(TextBox textBox, ComboBox comboBox, StringCollection collection)
         {
-            string SelectedPath = textBox.Text;
+            string selected = textBox.Text;
 
             bool ItemExists = false;
 
-            if (SelectedPath != string.Empty)
+            if (selected != string.Empty)
             {
                 foreach (string item in comboBox.Items)
                 {
-                    if (item == SelectedPath)
+                    if (item == selected)
                     {
                         ItemExists = true;
                         break;
@@ -776,8 +798,8 @@ namespace Maintenance
                 }
                 if (!ItemExists)
                 {
-                    comboBox.Items.Add(SelectedPath);
-                    collection.Add(SelectedPath);
+                    comboBox.Items.Add(selected);
+                    collection.Add(selected);
                 }
 
                 textBox.Text = string.Empty;
