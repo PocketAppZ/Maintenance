@@ -78,7 +78,7 @@ namespace Maintenance
             {
                 var Output = Regex.Replace(e.Data, "\x00", "");
 
-                if (!Output.Contains("[=") && !Output.Contains("%"))
+                if (!Output.Contains("[=") && !Output.Contains("%") && !Output.Contains(string.Empty))
                 {
                     Logging.Info(Output, "Full Checkup - Data Recieved");
                 }
