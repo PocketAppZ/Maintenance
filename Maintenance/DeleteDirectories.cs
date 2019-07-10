@@ -10,7 +10,7 @@ namespace Maintenance
         public static void DeleteSetPaths()
         {
             // Delete Files
-            foreach (string dir in Default.FilesToDelete)
+            foreach (string dir in Default.DirectoriesToDelete)
             {
                 bool deleted = false;
                 if (Directory.Exists(dir))
